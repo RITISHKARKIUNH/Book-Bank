@@ -2,3 +2,31 @@
 //
 // This is the place where you should place all additional styles and imports.
 // This will allow you to take advantage of future updates with lower time consumed on the upgrade process.
+
+header{
+    .border-bottom{
+        border-bottom: 1px solid rgba(239, 242, 247, 0.4) !important;
+    }
+}
+
+.main-banner{
+    .carousel.slide {
+        .carousel-indicators{
+            bottom: -100px;
+        }
+        .carousel-inner{
+            height:500px;
+            .carousel-item{
+                .image-container{ 
+                    img{
+                        height:500px;
+                        width:auto;
+                        top:-100px;
+                        left:0;
+                        position: absolute;
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,17 +1,26 @@
-import Head from 'next/head';
+import { Layout, BannerCarousel } from '../components/common';
+import React, { useState } from 'react';
+import { getSampleBooks } from '../lib/mock-data';
+import Book from '../components/books/book';
 
 export default function Home() {
+  const [books, setBooks] = useState(getSampleBooks().slice(1, 101));
   return (
-    <div className="book-bank">
-      <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-      <div className="container">
-        <div className="jumbotron">
-          <h1> Hello world !!! book bank class </h1>
+    <Layout>
+      <BannerCarousel />
+      <section className="slice bg-section-secondary">
+        <div className="container">
+          <h1> Recommended Books </h1>
+          <div className="row">
+            {
+              books.slice(0,8).map((book, index) =>{
+                return <Book key={book.isbn + index} book={book} />
+              })
+            }
+          </div>
+          {books.length}
         </div>
-      </div>
-    </div>
+      </section>
+    </Layout>
   )
 }
