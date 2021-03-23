@@ -1,0 +1,36 @@
+type Book @model 
+@key(name: "booksByUsername", fields: ["username"], queryField: "booksByUsername")
+@auth(rules: [
+  { allow: owner, ownerField: "username" },
+  { allow: public, operations: [read] }
+]) {
+  id: ID!
+  title: String!
+  description: String
+  author: String!
+  publication: String!
+  isbn: String!
+  category: [String!]
+  condition: String!
+  price: String!
+  picture: String,
+  username : String
+}
+
+type Review @model {
+  id : ID!
+  isbn : String!
+  totalRating : Int
+  ratings : [String]
+}
+
+type User @model {
+  id: ID!
+  firstName: String
+  lastName: String
+  description: String
+  phoneNumber: String
+  image: String
+  favoriteBooks : [Book]
+  reviews : [Review]
+}

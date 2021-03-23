@@ -1,0 +1,60 @@
+// User styles
+//
+// This is the place where you should place all additional styles and imports.
+// This will allow you to take advantage of future updates with lower time consumed on the upgrade process.
+
+header{
+    .border-bottom{
+        border-bottom: 1px solid rgba(239, 242, 247, 0.4) !important;
+    }
+}
+
+.main-banner{
+    .carousel.slide {
+        .carousel-indicators{
+            bottom: -50px;
+        }
+        .carousel-inner{
+            height:400px;
+            .carousel-image{
+                height:450px;
+                width:auto;
+                left:50%;
+                position: absolute;
+                top:0;
+            }
+        }
+    }
+}
+
+//bbok card style
+.book-card{
+    .card-footer{
+        a {
+            font-size: 20px;
+        }
+    }
+}
+
+//search bar styles
+.search-bar + .search-suggestions{
+    position: absolute;
+    width: 100%;
+    top:55px;
+    left:0;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+
+//media queries
+@media (min-width: 992px){
+    .section-rotate {
+        min-height: 500px;
+    }
+}
+
+//book bank select
+.bookbank-select{
+    width: 100%;
+}
