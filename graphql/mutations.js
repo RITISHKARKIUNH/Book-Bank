@@ -46,6 +46,72 @@ export const deleteReview = /* GraphQL */ `
     }
   }
 `;
+export const createBook = /* GraphQL */ `
+  mutation CreateBook(
+    $input: CreateBookInput!
+    $condition: ModelBookConditionInput
+  ) {
+    createBook(input: $input, condition: $condition) {
+      id
+      title
+      description
+      author
+      publication
+      isbn
+      category
+      condition
+      price
+      picture
+      username
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const updateBook = /* GraphQL */ `
+  mutation UpdateBook(
+    $input: UpdateBookInput!
+    $condition: ModelBookConditionInput
+  ) {
+    updateBook(input: $input, condition: $condition) {
+      id
+      title
+      description
+      author
+      publication
+      isbn
+      category
+      condition
+      price
+      picture
+      username
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const deleteBook = /* GraphQL */ `
+  mutation DeleteBook(
+    $input: DeleteBookInput!
+    $condition: ModelBookConditionInput
+  ) {
+    deleteBook(input: $input, condition: $condition) {
+      id
+      title
+      description
+      author
+      publication
+      isbn
+      category
+      condition
+      price
+      picture
+      username
+      createdAt
+      updatedAt
+    }
+  }
+`;
 export const createUser = /* GraphQL */ `
   mutation CreateUser(
     $input: CreateUserInput!
@@ -161,72 +227,6 @@ export const deleteUser = /* GraphQL */ `
         createdAt
         updatedAt
       }
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const createBook = /* GraphQL */ `
-  mutation CreateBook(
-    $input: CreateBookInput!
-    $condition: ModelBookConditionInput
-  ) {
-    createBook(input: $input, condition: $condition) {
-      id
-      title
-      description
-      author
-      publication
-      isbn
-      category
-      condition
-      price
-      picture
-      username
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const updateBook = /* GraphQL */ `
-  mutation UpdateBook(
-    $input: UpdateBookInput!
-    $condition: ModelBookConditionInput
-  ) {
-    updateBook(input: $input, condition: $condition) {
-      id
-      title
-      description
-      author
-      publication
-      isbn
-      category
-      condition
-      price
-      picture
-      username
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const deleteBook = /* GraphQL */ `
-  mutation DeleteBook(
-    $input: DeleteBookInput!
-    $condition: ModelBookConditionInput
-  ) {
-    deleteBook(input: $input, condition: $condition) {
-      id
-      title
-      description
-      author
-      publication
-      isbn
-      category
-      condition
-      price
-      picture
-      username
       createdAt
       updatedAt
     }

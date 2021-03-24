@@ -6,38 +6,11 @@ import '@fortawesome/fontawesome-free/js/regular';
 import '@fortawesome/fontawesome-free/js/brands';
 import '@fortawesome/fontawesome-svg-core/styles.css' // Import the CSS
 
-import '../configureAmplify'
-import Link from 'next/link'
-import { useState, useEffect } from 'react'
-import { Auth, Hub } from 'aws-amplify'
+import { Amplify } from "aws-amplify";
+import awsExports from "../aws-exports";
+Amplify.configure({ ...awsExports, ssr: true });
 
 function MyApp({ Component, pageProps }) {
-  const [signedInUser, setSignedInUser] = useState(false);
-
-  useEffect(() => {
-    authListener();
-  });
-
-  async function authListener() {
-
-    Hub.listen('auth', (data) => {
-      switch (data.payload.event) {
-        case 'signIn':
-          return setSignedInUser(true)
-        case 'signOut':
-          return setSignedInUser(false)
-      }
-    });
-
-    try {
-      await Auth.currentAuthenticatedUser();
-      setSignedInUser(true);
-    } catch (err) {
-      console.log(err);
-    }
-
-  }
-
   return (
     <Component {...pageProps} />
   )

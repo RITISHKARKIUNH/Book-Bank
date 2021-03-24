@@ -1,4 +1,3 @@
-import { withAuthenticator } from '@aws-amplify/ui-react';
 import { useState, useRef } from 'react';
 import { API, Storage } from 'aws-amplify';
 import { v4 as uuid } from 'uuid';
@@ -11,6 +10,7 @@ import { createBook } from '../../graphql/mutations';
 import { Input } from '../../components/common';
 import ProfileLayout from "../../components/profile/profileLayout";
 import { makeBookStatusOptions, makeCategoryOptions, createOption } from '../../lib/commondata';
+import WithProfileLayout from '../../hoc/withprofilelayout';
 
 const initialState = {
     title: '',
@@ -109,7 +109,7 @@ function AddBook() {
     };
 
     return (
-        <ProfileLayout>
+        <>
             <div className="page-content">
                 <div className="page-title">
                     <h1 className="text-3xl font-semibold tracking-wide mt-2 mb-3 text-white">Add a new book</h1>
@@ -265,8 +265,8 @@ function AddBook() {
                     </div>
                 </div>
             </div>
-        </ProfileLayout>
+        </>
     )
 }
 
-export default withAuthenticator(AddBook);
+export default WithProfileLayout(AddBook);

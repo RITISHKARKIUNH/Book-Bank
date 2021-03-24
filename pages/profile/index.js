@@ -1,18 +1,24 @@
-import ProfileLayout from "../../components/profile/profileLayout";
+import { useState, useEffect } from 'react';
+import AddUserDetail from '../../components/profile/adduserdetail';
+import WithProfileLayout from '../../hoc/withprofilelayout';
 
-function Profile() {
-    return (
-        <ProfileLayout>
+function Profile({ user }) {
+    if(!user) return null;
+    const [selectedTab, setSelectedTab] = useState(0);
+    if (user.profile) {
+        return (
             <div className="page-content">
                 <div className="page-title">
-                    <h1 className="text-3xl font-semibold tracking-wide mt-2 mb-3 text-white">Profile page</h1>
-                </div>
-                <div className="container">
-                    <a href="/profile/addbook" className="btn  btn-lg btn-primary btn-icon rounded-pill">add a new book</a>
+                    <h1 className="text-3xl font-semibold tracking-wide mt-2 mb-3 text-white">Hi {user.profile.firstName} {user.profile.lastName}</h1>
                 </div>
             </div>
-        </ProfileLayout>
+        )
+    }
+
+    return (
+        <AddUserDetail user={user} />
     )
 }
 
-export default Profile;
+
+export default WithProfileLayout(Profile);

@@ -4,8 +4,10 @@ import { API, Auth, Storage } from 'aws-amplify';
 import { booksByUsername } from '../../graphql/queries';
 import { deleteBook as deleteBookMutation } from '../../graphql/mutations';
 import Book from '../../components/books/book';
+import WithProfileLayout from '../../hoc/withprofilelayout';
 
-function Profile() {
+function ListedBooks({ user }) {
+    if(!user) return null;
     const [books, setBooks] = useState([]);
     const [booksLoading, setBooksLoading] = useState(true);
 
@@ -14,7 +16,8 @@ function Profile() {
     }, []);
 
     async function fetchBooks() {
-        const { username } = await Auth.currentAuthenticatedUser();
+        console
+        const { username } = user;
         const bookData = await API.graphql({
             query: booksByUsername, variables: { username }
         });
@@ -47,7 +50,7 @@ function Profile() {
 
     if (books.length === 0 && !booksLoading) {
         return (
-            <ProfileLayout>
+            <>
                 <div className="page-content">
                     <div className="page-title">
                         <h1 className="text-3xl font-semibold tracking-wide mt-2 mb-3 text-white">You dont have any listed books in our platform.</h1>
@@ -56,12 +59,12 @@ function Profile() {
                         <a href="/profile/addbook" className="btn  btn-lg btn-primary btn-icon rounded-pill">add a new book</a>
                     </div>
                 </div>
-            </ProfileLayout>
+            </>
         )
     }
 
     return (
-        <ProfileLayout>
+        <>
             <div className="page-content">
                 <div className="page-title">
                     <h1 className="text-3xl font-semibold tracking-wide mt-2 mb-3 text-white">Listed Books</h1>
@@ -78,8 +81,8 @@ function Profile() {
                     </div>
                 </div>
             </div>
-        </ProfileLayout>
+        </>
     )
 }
 
-export default Profile;
+export default WithProfileLayout(ListedBooks);

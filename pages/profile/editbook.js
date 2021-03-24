@@ -9,10 +9,10 @@ import Select from 'react-select';
 
 import { updateBook } from '../../graphql/mutations';
 import { getBook } from '../../graphql/queries';
-import ProfileLayout from "../../components/profile/profileLayout";
 import { Input } from '../../components/common';
 import { makeBookStatusOptions, makeCategoryOptions, createOption, bookStatus } from '../../lib/commondata';
 import { selectStyle } from './addbook';
+import WithProfileLayout from '../../hoc/withprofilelayout';
 
 function EditBook({ bookData }) {
     if (!bookData) return null;
@@ -116,7 +116,7 @@ function EditBook({ bookData }) {
 
 
     return (
-        <ProfileLayout>
+        <>
             <div className="page-content">
                 <div className="page-title">
                     <h1 className="text-3xl font-semibold tracking-wide mt-2 mb-3 text-white">edit book details</h1>
@@ -244,14 +244,12 @@ function EditBook({ bookData }) {
                     </div>
                 </div>
             </div>
-        </ProfileLayout>
+        </>
     )
 }
 
 EditBook.getInitialProps = async (ctx) => {
     const { id } = ctx.query;
-
-    console.log(ctx.query);
 
     const bookData = await API.graphql({
         query: getBook, variables: { id }
@@ -262,4 +260,4 @@ EditBook.getInitialProps = async (ctx) => {
     }
 }
 
-export default EditBook;
+export default WithProfileLayout(EditBook);
