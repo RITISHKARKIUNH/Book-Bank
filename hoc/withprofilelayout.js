@@ -88,8 +88,8 @@ export const WithProfileLayout = (WrappedComponent) => {
         }
 
         if (!user && !userLoading) return <PageNotFound />;
-        if(!user) return null;
-        
+        if (!user) return null;
+
         return (
             <div className="dashboard-all-minified-styles-conatiner">
                 <div className={`application application-offset ready ${isOpen ? 'sidenav-pinned' : ''}`}>
@@ -123,13 +123,19 @@ export const WithProfileLayout = (WrappedComponent) => {
                                     {/* <!-- Avatar --> */}
                                     <div>
                                         <a href="/profile" className="avatar rounded-circle avatar-xl">
-                                            <Picture path={user.profile ? user.profile.picture : ''} />
-                                            <img alt="Image placeholder" src={user?.session?.user?.picture ? user.session.user.picture : "/static/background/avatar.png"} />
+                                            {user && user.profile && user.profile.image ? <Picture style={{ width: "100px", height: "100px", objectFit: "cover" }} path={user.profile.image} className="rounded-circle" /> : <img alt="Image placeholder" src="/static/background/avatar.png" />}
                                         </a>
                                         <div className="mt-4">
                                             <h4 className="mb-0 text-white ">Hello</h4>
-                                            <h5 className="mb-0 text-white ">{user?.attributes?.email ? user.attributes.email : 'John Doe'}</h5>
-                                            <span className="d-block text-sm text-white opacity-8 mb-3">Student</span>
+                                            {
+                                                user.profile &&
+                                                <>
+                                                    <h5 className="mb-0 text-white text-uppercase">{user.profile.firstName} {user.profile.lastName}</h5>
+                                                </>
+                                            }
+                                            {
+                                                !user.profile && <h5 className="mb-0 text-white ">{user?.attributes?.email ? user.attributes.email : 'John Doe'}</h5>
+                                            }
                                         </div>
                                     </div>
 
@@ -220,15 +226,31 @@ export const WithProfileLayout = (WrappedComponent) => {
                                                 <DropdownToggle style={{ margin: 0 }} nav className="nav-link pr-lg-0">
                                                     <div style={{ marginTop: '0' }} className="media media-pill align-items-center">
                                                         <span className="avatar rounded-circle">
-                                                            <img alt="Image placeholder" src={user?.session?.user?.picture ? user.session.user.picture : "/static/background/avatar.png"} />
+                                                            {user && user.profile && user.profile.image ? <Picture style={{ height: "36px", width: "36px", objectFit: "cover" }} path={user.profile.image} className="rounded-circle" /> : <img alt="Image placeholder" src="/static/background/avatar.png" />}
                                                         </span>
                                                         <div className="ml-2 d-none d-lg-block">
-                                                            <span className="mb-0 text-sm text-capitalize">{user?.attributes?.email ? user.attributes.email : 'John Doe'}</span>
+                                                            {
+                                                                user.profile &&
+                                                                <>
+                                                                    <span className="mb-0 text-sm text-capitalize">{user.profile.firstName} {user.profile.lastName}</span>
+                                                                </>
+                                                            }
+                                                            {
+                                                                !user.profile && <span className="mb-0 text-sm text-capitalize">{user?.attributes?.email ? user.attributes.email : 'John Doe'}</span>
+                                                            }
                                                         </div>
                                                     </div>
                                                 </DropdownToggle>
                                                 <DropdownMenu className="dropdown-menu dropdown-menu-sm dropdown-menu-right dropdown-menu-arrow" right>
-                                                    <h6 className="dropdown-header px-0 text-capitalize">Hi, {user?.attributes?.email ? user.attributes.email : 'John Doe'}!</h6>
+                                                    {
+                                                        user.profile &&
+                                                        <>
+                                                            <h6 className="dropdown-header px-0 text-capitalize">Hi, {user.profile.firstName} {user.profile.lastName}</h6>
+                                                        </>
+                                                    }
+                                                    {
+                                                        !user.profile && <h6 className="dropdown-header px-0 text-capitalize">Hi, {user?.attributes?.email ? user.attributes.email : 'John Doe'}!</h6>
+                                                    }
                                                     <div className="dropdown-divider"></div>
                                                     <span role="button" onClick={() => signOut()} className="dropdown-item">
                                                         <i className="fas fa-sign-out-alt"></i>

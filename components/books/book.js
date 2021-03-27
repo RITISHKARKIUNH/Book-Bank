@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import Picture from '../common/picture';
 
 function Book({ book, smallView, ownerView, deleteBook, onEditBook }) {
     const router = useRouter();
@@ -24,20 +25,20 @@ function Book({ book, smallView, ownerView, deleteBook, onEditBook }) {
                         </div>
                         {/* <!-- Product image --> */}
                         <figure className="figure">
-                            <img style={{ height: "250px", width: "auto" }} alt="Image placeholder" src={book.picture} className="img-center img-fluid" />
+                            <Picture style={{ height: "250px", width: "auto" }} alt="Image placeholder" path={book.picture} className="img-center img-fluid" />
                         </figure>
                     </a>
                 </Link>
                 <div className="card-body">
                     {/* <!-- Price --> */}
-                    <div className="d-flex align-items-center mt-4">
+                    <div className="mt-4">
                         <span className="h6 mb-0">${book.price} USD</span>
 
                         <div className="ml-auto">
                             {
                                 book.category && book.category.map((cat, index) => {
                                     return (
-                                        <span key={index} className="badge badge-info rounded-pill ml-auto">{cat}</span>
+                                        <span key={index} className="badge badge-info rounded-pill ml-1">{cat}</span>
                                     )
                                 })
                             }
@@ -74,7 +75,7 @@ function Book({ book, smallView, ownerView, deleteBook, onEditBook }) {
                             ownerView &&
                             <>
                                 <button onClick={() => router.push(`/profile/editbook?id=${book.id}`)} className="btn btn-sm btn-info btn-icon rounded-pill"><i className="far fa-edit" ></i> edit</button>
-                                <Link href={`/books/${book.id}`}><a className="btn btn-sm btn-info btn-icon rounded-pill"><i className="fad fa-external-link" ></i> view</a></Link>
+                                <Link href={`/books/${book.id}`}><a className="btn btn-sm btn-info btn-icon rounded-pill"><i className="fas fa-paper-plane" ></i> view</a></Link>
                                 <button
                                     className="btn btn-sm btn-danger btn-icon rounded-pill"
                                     onClick={() => deleteBook(book.id)}

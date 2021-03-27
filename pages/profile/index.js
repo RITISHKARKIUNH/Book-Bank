@@ -1,23 +1,74 @@
 import { useState, useEffect } from 'react';
 import AddUserDetail from '../../components/profile/adduserdetail';
 import WithProfileLayout from '../../hoc/withprofilelayout';
+import { Picture } from '../../components/common';
+
+function UserDetail({ user, onEditUser }) {
+    return (
+        <div className="page-content">
+            <div className="page-title">
+                <h1 className="text-3xl font-semibold tracking-wide mt-2 mb-3 text-white">Hi {user.profile.firstName} {user.profile.lastName}</h1>
+            </div>
+            <div className="card">
+                <div className="card-body">
+
+                    <div className="form-group">
+                        <label className="form-control-label">Phone Number</label>
+                        <div className="input-group">
+                            <h4 role="button"><i className="fa fa-mobile" /> {user.profile.phoneNumber}</h4>
+                        </div>
+                    </div>
+
+                    <div className="form-group">
+                        <label className="form-control-label">About yourself</label>
+                        <div className="input-group">
+                            <h4 role="button">{user.profile.description}</h4>
+                        </div>
+                    </div>
+
+                    <div className="form-group">
+                        <label className="form-control-label">Profile Image</label>
+                        <div className="input-group">
+                            {
+                                user.profile.image && <Picture style={{ width: "300px", height: "300px", objectFit: "cover" }} path={user.profile.image} className="rounded d-block img-thumbnail" />
+                            }
+                        </div>
+                    </div>
+
+                    <div className="form-group">
+                        <div className="input-group">
+                            <button className="btn btn-info btn-lg mt-2" onClick={() => onEditUser()}> Edit Info</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    );
+}
 
 function Profile({ user }) {
-    if(!user) return null;
-    const [selectedTab, setSelectedTab] = useState(0);
-    if (user.profile) {
-        return (
-            <div className="page-content">
-                <div className="page-title">
-                    <h1 className="text-3xl font-semibold tracking-wide mt-2 mb-3 text-white">Hi {user.profile.firstName} {user.profile.lastName}</h1>
-                </div>
-            </div>
-        )
+    if (!user) return null;
+    const [profileMode, setProfileMode] = useState('add');
+
+    useEffect(() => {
+        console.log(user.profile);
+        if (user.profile) {
+            setProfileMode('display');
+        } else {
+            setProfileMode('add');
+        }
+    }, [user.profile]);
+
+    function onEditUser() {
+        setProfileMode('edit');
     }
 
-    return (
-        <AddUserDetail user={user} />
-    )
+    if (profileMode === 'display') {
+        return <UserDetail user={user} onEditUser={onEditUser} />
+    } else {
+        return <AddUserDetail user={user} mode={profileMode} />
+    }
 }
 
 

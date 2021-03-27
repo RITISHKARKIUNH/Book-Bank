@@ -1,13 +1,14 @@
 import { useState, useEffect } from 'react';
-import { API, Storage } from 'aws-amplify'
+import { API, Storage, Auth } from 'aws-amplify'
 import { useRouter } from 'next/router'
 import ReactMarkdown from 'react-markdown'
 import '../../configureAmplify'
 import { listBooks, getBook } from '../../graphql/queries'
 import { Layout } from '../../components/common';
+import { getUser, booksByUsername } from "../../graphql/queries";
+import Picture from '../../components/common/picture';
 
-export default function BookDetail({ book }) {
-
+export default function BookDetail({ book, bookid }) {
     if (!book) {
         return (
             <Layout>
@@ -18,44 +19,75 @@ export default function BookDetail({ book }) {
         )
     }
 
-    const [picture, setPicture] = useState(null);
-
-    useEffect(() => {
-        updateCoverImage();
-    }, []);
-
-    async function updateCoverImage() {
-        if (book.picture) {
-            const imageKey = await Storage.get(book.picture);
-            setPicture(imageKey);
-        }
-    }
-
+    const [userID, setUserId] = useState(null);
+    const [addedByUser, setAddedByUser] = useState(false);
     const [isSaved, setIsSaved] = useState(false);
 
     useEffect(() => {
         // check if saved in local storage before
         let items = JSON.parse(window.localStorage.getItem('favoriteList'));
-        if (items.some(item => item.isbn === book.isbn)) {
+        if (items && items.length > 0 && items.some(item => item.id === book.id)) {
             setIsSaved(true);
         }
-    });
+
+        checkUser();
+    }, []);
+
+    async function checkUser() {
+        try {
+            let id = null;
+            let userData = null;
+            let listedBooks = null;
+            let user = await Auth.currentAuthenticatedUser();
+
+            if (user && user.attributes.sub) {
+                id = user.attributes.sub;
+                setUserId(user.attributes.sub);
+                userData = await API.graphql({
+                    query: getUser, variables: { id }
+                });
+
+                listedBooks = await API.graphql({
+                    query: booksByUsername, variables: { username: id }
+                });
+
+                user = { ...user, profile: userData.data.getUser, listedBooks }
+            }
+
+            if (user && user.listedBooks) {
+                const books = user.listedBooks.data?.booksByUsername?.items;
+                books.forEach(book => {
+                    if (book.id === bookid) {
+                        setAddedByUser(true);
+                    }
+                });
+            }
+
+        } catch (err) {
+            console.error(err);
+            setAddedByUser(true);
+        }
+    }
 
     const savetoLocalStorage = (book) => {
         let items = JSON.parse(window.localStorage.getItem('favoriteList'));
         if (!items) {
             items = [];
         }
-        items.push(book);
-        window.localStorage.setItem('favoriteList', JSON.stringify(items));
-        setIsSaved(true);
+        console.log(userID);
+        if (userID) {
+            const modifiedBook = { ...book, addedBy: userID };
+            items.push(modifiedBook);
+            window.localStorage.setItem('favoriteList', JSON.stringify(items));
+            setIsSaved(true);
+        }
     }
 
     const removeFromLocalStorage = (book) => {
         let items = JSON.parse(window.localStorage.getItem('favoriteList'));
 
         if (items && items.length > 0) {
-            items = items.filter(item => item.isbn !== book.isbn);
+            items = items.filter(item => item.id !== book.id);
         }
         window.localStorage.setItem('favoriteList', JSON.stringify(items));
         setIsSaved(false);
@@ -106,14 +138,10 @@ export default function BookDetail({ book }) {
                                         <ReactMarkdown className='prose' children={book.description} />
                                     </div>
                                     {
-                                        book.authors &&
+                                        book.author &&
                                         <div className="pt-4 mt-4 border-top">
-                                            <h6 className="text-sm">{book.authors.length > 1 ? "Authors " : "Author "}:</h6>
-                                            {
-                                                book.authors.map(author => {
-                                                    return <p key={author} className="text-sm mb-0">{author}</p>
-                                                })
-                                            }
+                                            <h6 className="text-sm">Author :</h6>
+                                            <p className="text-sm mb-0">{book.author}</p>
                                         </div>
                                     }
                                 </div>
@@ -125,7 +153,9 @@ export default function BookDetail({ book }) {
                                 <div className="card-body">
                                     <div className="row">
                                         <div className="col">
-                                            <img style={{ height: "300px", width: "auto" }} alt="Image placeholder" src={picture} className="img-fluid" />
+                                            {
+                                                book.picture && <Picture style={{ height: "300px", width: "auto" }} path={book.picture} alt="book" className="img-fluid" />
+                                            }
                                         </div>
                                         <div className="col">
                                             {/* add to categories */}
@@ -156,28 +186,32 @@ export default function BookDetail({ book }) {
                                                 </span>
                                                 4,563 Ratings
                                             </div> */}
-                                            <div className="col-sm-12 mt-5">
-                                                {/* <!-- Add to cart --> */}
-                                                {
-                                                    isSaved &&
-                                                    <button onClick={() => removeFromLocalStorage(book)} type="button" className="btn btn-danger btn-icon btn-block">
-                                                        <span className="btn-inner--icon"><i className="fas fa-trash"></i></span>
-                                                        <span className="btn-inner--text">Delete from favorite</span>
-                                                    </button>
-                                                }
-                                                {
-                                                    !isSaved &&
-                                                    <button onClick={() => savetoLocalStorage(book)} type="button" className="btn btn-success btn-icon btn-block">
-                                                        <span className="btn-inner--icon"><i className="fas fa-bookmark"></i></span>
-                                                        <span className="btn-inner--text">Save to favorite</span>
-                                                    </button>
-                                                }
-
-                                                <button type="button" className="btn btn-primary btn-icon btn-block">
-                                                    <span className="btn-inner--icon"><i className="fas fa-shopping-cart"></i></span>
-                                                    <span className="btn-inner--text">Add to cart</span>
-                                                </button>
-                                            </div>
+                                            {
+                                                !addedByUser &&
+                                                <div className="col-sm-12 mt-5">
+                                                    {/* <!-- Add to cart --> */}
+                                                    {
+                                                        isSaved &&
+                                                        <button onClick={() => removeFromLocalStorage(book)} type="button" className="btn btn-danger btn-icon btn-block">
+                                                            <span className="btn-inner--icon"><i className="fas fa-trash"></i></span>
+                                                            <span className="btn-inner--text">Delete from favorite</span>
+                                                        </button>
+                                                    }
+                                                    {
+                                                        !isSaved &&
+                                                        <button onClick={() => savetoLocalStorage(book)} type="button" className="btn btn-success btn-icon btn-block">
+                                                            <span className="btn-inner--icon"><i className="fas fa-bookmark"></i></span>
+                                                            <span className="btn-inner--text">Save to favorite</span>
+                                                        </button>
+                                                    }
+                                                </div>
+                                            }
+                                            {
+                                                addedByUser && userID && 
+                                                <div class="alert alert-info mt-5" role="alert">
+                                                    Added by you
+                                                </div>
+                                            }
                                         </div>
                                     </div>
                                 </div>
@@ -210,7 +244,8 @@ export async function getStaticProps({ params }) {
 
     return {
         props: {
-            book: bookData.data.getBook
+            book: bookData.data.getBook,
+            bookid: id
         }
     }
 }

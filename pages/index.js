@@ -9,23 +9,16 @@ export default function Home() {
   const [loadingBooks, setLoadingBooks] = useState(true);
 
   useEffect(() => {
-    fetchPosts()
+    fetchBooks()
   }, []);
 
-  async function fetchPosts() {
+  async function fetchBooks() {
     const bookData = await API.graphql({
       query: listBooks
     });
 
     const { items } = bookData.data.listBooks;
-    // Fetch images from S3 for posts that contain a cover image
-    const booksWithImages = await Promise.all(items.map(async book => {
-      if (book.picture) {
-        book.picture = await Storage.get(book.picture)
-      }
-      return book;
-    }));
-    setBooks(booksWithImages);
+    setBooks(items);
     setLoadingBooks(false);
   }
 

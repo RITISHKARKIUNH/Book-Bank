@@ -24,7 +24,7 @@ type Review @model {
   ratings : [String]
 }
 
-type User @model 
+type User @model
 @auth(rules: [
   { allow: owner, ownerField: "id" },
   { allow: public, operations: [read] }

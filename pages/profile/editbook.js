@@ -10,7 +10,7 @@ import Select from 'react-select';
 import { updateBook } from '../../graphql/mutations';
 import { getBook } from '../../graphql/queries';
 import { Input } from '../../components/common';
-import { makeBookStatusOptions, makeCategoryOptions, createOption, bookStatus } from '../../lib/commondata';
+import { makeBookStatusOptions, makeCategoryOptions, createOption } from '../../lib/commondata';
 import { selectStyle } from './addbook';
 import WithProfileLayout from '../../hoc/withprofilelayout';
 

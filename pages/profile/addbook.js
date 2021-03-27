@@ -8,7 +8,6 @@ import CreatableSelect from 'react-select/creatable';
 import Select from 'react-select';
 import { createBook } from '../../graphql/mutations';
 import { Input } from '../../components/common';
-import ProfileLayout from "../../components/profile/profileLayout";
 import { makeBookStatusOptions, makeCategoryOptions, createOption } from '../../lib/commondata';
 import WithProfileLayout from '../../hoc/withprofilelayout';
 
@@ -28,7 +27,8 @@ export const selectStyle = {
     control: (base, state) => ({
         ...base,
         border: state.isFocused ? '1px solid rgba(110, 0, 255, 0.5)' : '1px solid #e0e6ed',
-        boxShadow: state.isFocused ? 'inset 0 1px 1px rgb(31 45 61 / 8%), 0 0 20px rgb(110 0 255 / 10%)' : 'inset 0 1px 1px rgb(31 45 61 / 8%)'
+        boxShadow: state.isFocused ? 'inset 0 1px 1px rgb(31 45 61 / 8%), 0 0 20px rgb(110 0 255 / 10%)' : 'inset 0 1px 1px rgb(31 45 61 / 8%)',
+        height:"50px"
     })
 };
 
@@ -260,7 +260,7 @@ function AddBook() {
                                 onClick={createNewBook}
                             >
                                 Add Book
-                    </button>
+                            </button>
                         </div>
                     </div>
                 </div>
