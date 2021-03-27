@@ -26,7 +26,7 @@ export default function BookDetail({ book, bookid }) {
     useEffect(() => {
         // check if saved in local storage before
         let items = JSON.parse(window.localStorage.getItem('favoriteList'));
-        if (items && items.length > 0 && items.some(item => item.id === book.id)) {
+        if (items && items.length > 0 && items.some(item => item.id === bookid) && userID) {
             setIsSaved(true);
         }
 
@@ -39,10 +39,10 @@ export default function BookDetail({ book, bookid }) {
             let userData = null;
             let listedBooks = null;
             let user = await Auth.currentAuthenticatedUser();
+            setUserId(user.attributes.sub);
 
             if (user && user.attributes.sub) {
                 id = user.attributes.sub;
-                setUserId(user.attributes.sub);
                 userData = await API.graphql({
                     query: getUser, variables: { id }
                 });
@@ -56,11 +56,17 @@ export default function BookDetail({ book, bookid }) {
 
             if (user && user.listedBooks) {
                 const books = user.listedBooks.data?.booksByUsername?.items;
+                let items = JSON.parse(window.localStorage.getItem('favoriteList'));
+       
                 books.forEach(book => {
                     if (book.id === bookid) {
                         setAddedByUser(true);
                     }
                 });
+
+                if (items && items.length > 0 && items.some(item => item.id === bookid && item.addedBy === id)) {
+                    setIsSaved(true);
+                }
             }
 
         } catch (err) {
@@ -111,16 +117,16 @@ export default function BookDetail({ book, bookid }) {
                                     {/* <h6 className="text-sm">{book.pageCount} Pages</h6> */}
                                     {/* <!-- Rating --> */}
                                     <div className="row align-items-center">
-                                        <div className="col-sm-6">
-                                            {/* <span className="static-rating static-rating-sm d-block">
-                                                <i className="star far fa-star voted"></i>
-                                                <i className="star far fa-star voted"></i>
-                                                <i className="star far fa-star voted"></i>
-                                                <i className="star far fa-star voted"></i>
+                                        <div className="col-sm-3">
+                                            <span className="static-rating static-rating-sm d-block">
                                                 <i className="star far fa-star"></i>
-                                            </span> */}
+                                                <i className="star far fa-star"></i>
+                                                <i className="star far fa-star"></i>
+                                                <i className="star far fa-star"></i>
+                                                <i className="star far fa-star"></i>
+                                            </span>
                                         </div>
-                                        <div className="col-sm-6 text-sm-right">
+                                        <div className="col-sm-9 text-sm-right">
                                             <ul className="list-inline mb-0">
                                                 <li className="list-inline-item">
                                                     <span className="badge badge-pill badge-soft-info">ISBN: {book.isbn}</span>
@@ -176,16 +182,16 @@ export default function BookDetail({ book, bookid }) {
                                             <div className="col-sm-12 mb-2">
                                                 <span className="h6"> Price : ${book.price}</span>
                                             </div>
-                                            {/* <div className="col-sm-12 d-flex h6">
+                                            <div className="col-sm-12 d-flex h6">
                                                 <span className="static-rating static-rating-sm d-block mr-2">
-                                                    <i className="star far fa-star voted"></i>
-                                                    <i className="star far fa-star voted"></i>
-                                                    <i className="star far fa-star voted"></i>
-                                                    <i className="star far fa-star voted"></i>
+                                                    <i className="star far fa-star"></i>
+                                                    <i className="star far fa-star"></i>
+                                                    <i className="star far fa-star"></i>
+                                                    <i className="star far fa-star"></i>
                                                     <i className="star far fa-star"></i>
                                                 </span>
-                                                4,563 Ratings
-                                            </div> */}
+                                                0 Rating
+                                            </div>
                                             {
                                                 !addedByUser &&
                                                 <div className="col-sm-12 mt-5">

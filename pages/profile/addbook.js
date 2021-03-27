@@ -28,7 +28,7 @@ export const selectStyle = {
         ...base,
         border: state.isFocused ? '1px solid rgba(110, 0, 255, 0.5)' : '1px solid #e0e6ed',
         boxShadow: state.isFocused ? 'inset 0 1px 1px rgb(31 45 61 / 8%), 0 0 20px rgb(110 0 255 / 10%)' : 'inset 0 1px 1px rgb(31 45 61 / 8%)',
-        height:"50px"
+        height: "50px"
     })
 };
 
@@ -45,9 +45,9 @@ function AddBook() {
         setBook(() => ({ ...book, [e.target.name]: e.target.value }));
     }
 
-    function setCategory(values){
-        let category=[];
-        if(values.length > 0){
+    function setCategory(values) {
+        let category = [];
+        if (values.length > 0) {
             values.forEach(value => {
                 category.push(value.label)
             });
@@ -82,20 +82,25 @@ function AddBook() {
 
         console.log(book);
 
-        // If there is an image uploaded, store it in S3 and add it to the book metadata
-        if (image) {
-            const fileName = `${image.name}_${uuid()}`;
-            book.picture = fileName;
-            await Storage.put(fileName, image);
+
+        try {
+            // If there is an image uploaded, store it in S3 and add it to the book metadata
+            if (image) {
+                const fileName = `${image.name}_${uuid()}`;
+                book.picture = fileName;
+                await Storage.put(fileName, image);
+            }
+
+            await API.graphql({
+                query: createBook,
+                variables: { input: book },
+                authMode: "AMAZON_COGNITO_USER_POOLS"
+            });
+
+            router.push(`/books/${id}`);
+        } catch (e) {
+            console.error(e, "error happened");
         }
-
-        await API.graphql({
-            query: createBook,
-            variables: { input: book },
-            authMode: "AMAZON_COGNITO_USER_POOLS"
-        });
-
-        router.push(`/books/${id}`);
     }
 
     async function uploadImage() {

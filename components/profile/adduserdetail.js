@@ -53,6 +53,7 @@ const AddUserDetail = ({ user, mode }) => {
                 console.log(result);
             } else {
                 window.location.reload();
+                console.log("book added sucessfully");
             }
         } catch (e) {
             console.log(e);

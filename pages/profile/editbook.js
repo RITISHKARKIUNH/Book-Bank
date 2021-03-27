@@ -38,7 +38,7 @@ function EditBook({ bookData }) {
             setPicture(imageKey);
         }
 
-    },[]);
+    }, []);
 
     async function uploadImage() {
         fileInput.current.click();
@@ -72,16 +72,18 @@ function EditBook({ bookData }) {
             await Storage.put(fileName, picture);
         }
 
+        try {
+            await API.graphql({
+                query: updateBook,
+                variables: { input: bookUpdated },
+                authMode: "AMAZON_COGNITO_USER_POOLS"
+            });
+            router.push('/profile/listedbooks');
+            console.log('book successfully updated!');
+        } catch (e) {
+            console.error(e);
+        }
 
-        await API.graphql({
-            query: updateBook,
-            variables: { input: bookUpdated },
-            authMode: "AMAZON_COGNITO_USER_POOLS"
-        });
-
-        console.log('book successfully updated!');
-
-        router.push('/profile/listedbooks');
     }
 
     function setCategory(values) {
