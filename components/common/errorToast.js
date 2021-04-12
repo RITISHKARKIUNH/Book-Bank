@@ -1,4 +1,4 @@
-function ErrorToast(message) {
+function ErrorToast({ message }) {
     return (
         <div className="custom-toast error">
             <div className="left">

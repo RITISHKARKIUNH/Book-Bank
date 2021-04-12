@@ -1,11 +1,10 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Input } from '../common';
 import { createUser, updateUser } from '../../graphql/mutations';
 import { API, Storage } from 'aws-amplify';
 import { v4 as uuid } from "uuid";
-import { Picture } from '../../components/common';
 
-const AddUserDetail = ({ user, mode }) => {
+const AddUserDetail = ({ user, mode, onToastEvent }) => {
     const { profile } = user;
     const [firstName, setFirstName] = useState(mode === 'add' ? '' : profile ? profile.firstName : '');
     const [secondName, setSecondName] = useState(mode === 'add' ? '' : profile ? profile.lastName : '');
@@ -15,19 +14,29 @@ const AddUserDetail = ({ user, mode }) => {
     const hiddenFileInput = useRef(null);
     const [image, setImage] = useState(null);
 
+    useEffect(() => {
+        console.log(mode, profile);
+        if (mode !== 'add' && profile.image) {
+            fetchUserImage();
+        }
+    }, [mode]);
+
+    async function fetchUserImage() {
+        const image = await Storage.get(profile.image);
+        if (image) {
+            setImage(image);
+        }
+    }
+
     const submitHandler = async (event) => {
         event.preventDefault();
 
         try {
-            let key = null;
-
-            if (user.image) {
-                await Storage.remove(user.image);
-            }
-
-            if (image) {
+            let key = profile.image;
+            if (image && localImage) {
                 const fileName = `${image.name}_${uuid()}`;
                 key = fileName;
+                await Storage.remove(profile.image);
                 await Storage.put(fileName, image, {
                     contentType: image.type,
                 });
@@ -48,15 +57,25 @@ const AddUserDetail = ({ user, mode }) => {
                 },
                 authMode: "AMAZON_COGNITO_USER_POOLS"
             });
+            console.log(result);
 
             if (result && result.errors && result.errors.length > 0) {
-                console.log(result);
+                onToastEvent({
+                    message: 'Could not update user information',
+                    mode: 'error'
+                });
             } else {
-                window.location.reload();
-                console.log("profile added sucessfully");
+                onToastEvent({
+                    message: 'User information sucessfully updated',
+                    mode: 'success'
+                });
             }
         } catch (e) {
             console.log(e);
+            onToastEvent({
+                message: "Opps something went wrong",
+                mode: 'error'
+            });
         }
     }
 
@@ -72,6 +91,7 @@ const AddUserDetail = ({ user, mode }) => {
     };
 
     return (
+
         <div className="page-content">
             <div className="page-title">
                 <h4 className="text-3xl font-semibold tracking-wide mt-2 mb-3 text-white">{mode === 'add' ? 'Add' : 'Edit'} your profile details</h4>
@@ -140,7 +160,7 @@ const AddUserDetail = ({ user, mode }) => {
                             </div>
                         </div>
 
-                        {
+                        {/* {
                             !image && user?.profile?.image &&
                             <div className="form-group">
                                 <label className="form-control-label">Profile Image</label>
@@ -148,10 +168,18 @@ const AddUserDetail = ({ user, mode }) => {
                                     <Picture style={{ width: "300px", height: "300px", objectFit: "cover" }} path={user.profile.image} className="rounded d-block img-thumbnail" />
                                 </div>
                             </div>
+                        } */}
+
+                        {
+                            image &&
+                            <div className="form-group">
+                                <label className="form-control-label">Profile Image</label>
+                                <img src={localImage ? localImage : image} className="mt-4" className="rounded d-block img-thumbnail" />
+                            </div>
                         }
 
 
-                        {
+                        {/* {
                             image && (
                                 <div className="form-group">
                                     <label className="form-control-label">Profile Image</label>
@@ -160,7 +188,7 @@ const AddUserDetail = ({ user, mode }) => {
                                     </div>
                                 </div>
                             )
-                        }
+                        } */}
 
                         <input
                             type="file"

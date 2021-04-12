@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
+import { toast } from 'react-toastify';
 import AddUserDetail from '../../components/profile/adduserdetail';
 import WithProfileLayout from '../../hoc/withprofilelayout';
 import { Picture } from '../../components/common';
+import { SucessToast, ErrorToast } from '../../components/common';
 
 function UserDetail({ user, onEditUser }) {
     return (
@@ -51,6 +53,34 @@ function Profile({ user }) {
     if (!user) return null;
     const [profileMode, setProfileMode] = useState('add');
 
+    const onToastEvent = event => {
+        if (event.mode === "success") {
+            console.log(event);
+            toast.info(<SucessToast message={event.message} />, {
+                position: "top-right",
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                onClose: () => window.location.reload()
+            });
+
+        } else {
+            console.log(event);
+            toast.error(<ErrorToast message={event.message} />, {
+                position: "top-right",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
+        }
+    }
+
     useEffect(() => {
         console.log(user.profile);
         if (user.profile) {
@@ -67,7 +97,7 @@ function Profile({ user }) {
     if (profileMode === 'display') {
         return <UserDetail user={user} onEditUser={onEditUser} />
     } else {
-        return <AddUserDetail user={user} mode={profileMode} />
+        return <AddUserDetail user={user} mode={profileMode} onToastEvent={onToastEvent} />
     }
 }
 
