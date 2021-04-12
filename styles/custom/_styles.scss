@@ -58,3 +58,68 @@ header{
 .bookbank-select{
     width: 100%;
 }
+
+//toast styles
+
+.custom-toast{
+    display: flex;
+    width: 500px;
+    color:white;
+    background: rgb(88, 11, 254);
+    &.error{
+        background: #e74c3c;
+    }
+    .left{
+        width: 20%;
+        padding: 10px;
+        box-sizing: border-box;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: transparent;
+        img{
+            width:100%;
+            height: auto;
+            filter: brightness(0) invert(1);
+            position: static;
+        }
+    }
+    .right{
+        width:80%;
+        color:white;
+        h5{
+            font-size: 20px;
+            text-align: left;
+            width: 100%;
+            margin: 10px 0 0;
+        }
+        p{
+            font-size: 15px;
+            text-align: left;
+            padding-right: 15px;
+        }
+
+    }
+}
+  
+.Toastify__toast--info{
+    background: rgb(88, 11, 254) !important;
+}
+  
+.Toastify__toast{
+    padding: 0 !important;
+}
+
+.Toastify__toast-body{
+    padding: 0 !important;
+}
+
+.Toastify__toast-container {
+    width: 500px !important;
+    padding:0 !important;
+}
+
+// white image 
+.white-image{
+    filter: brightness(0) invert(1);
+}

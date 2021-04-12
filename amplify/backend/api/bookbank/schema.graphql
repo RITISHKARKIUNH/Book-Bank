@@ -21,8 +21,20 @@ type Review @model {
   id : ID!
   isbn : String!
   totalRating : Int
-  ratings : [String]
+  totalRatingScore : String
+  ratings : [UserRating]
 }
+
+type UserRating @model {
+  id: ID!
+  score : Int!
+  description : String
+  picture : String
+  createdAt : String!
+  updatedAt : String
+  username : String!
+}
+
 
 type User @model
 @auth(rules: [
@@ -36,5 +48,5 @@ type User @model
   phoneNumber: String
   image: String
   favoriteBooks : [Book]
-  reviews : [Review]
+  ratings : [UserRating]
 }

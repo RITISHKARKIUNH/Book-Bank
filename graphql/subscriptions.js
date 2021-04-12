@@ -7,7 +7,16 @@ export const onCreateReview = /* GraphQL */ `
       id
       isbn
       totalRating
-      ratings
+      totalRatingScore
+      ratings {
+        id
+        score
+        description
+        picture
+        createdAt
+        updatedAt
+        username
+      }
       createdAt
       updatedAt
     }
@@ -19,7 +28,16 @@ export const onUpdateReview = /* GraphQL */ `
       id
       isbn
       totalRating
-      ratings
+      totalRatingScore
+      ratings {
+        id
+        score
+        description
+        picture
+        createdAt
+        updatedAt
+        username
+      }
       createdAt
       updatedAt
     }
@@ -31,9 +49,57 @@ export const onDeleteReview = /* GraphQL */ `
       id
       isbn
       totalRating
-      ratings
+      totalRatingScore
+      ratings {
+        id
+        score
+        description
+        picture
+        createdAt
+        updatedAt
+        username
+      }
       createdAt
       updatedAt
+    }
+  }
+`;
+export const onCreateUserRating = /* GraphQL */ `
+  subscription OnCreateUserRating {
+    onCreateUserRating {
+      id
+      score
+      description
+      picture
+      createdAt
+      updatedAt
+      username
+    }
+  }
+`;
+export const onUpdateUserRating = /* GraphQL */ `
+  subscription OnUpdateUserRating {
+    onUpdateUserRating {
+      id
+      score
+      description
+      picture
+      createdAt
+      updatedAt
+      username
+    }
+  }
+`;
+export const onDeleteUserRating = /* GraphQL */ `
+  subscription OnDeleteUserRating {
+    onDeleteUserRating {
+      id
+      score
+      description
+      picture
+      createdAt
+      updatedAt
+      username
     }
   }
 `;
@@ -118,13 +184,14 @@ export const onCreateUser = /* GraphQL */ `
         createdAt
         updatedAt
       }
-      reviews {
+      ratings {
         id
-        isbn
-        totalRating
-        ratings
+        score
+        description
+        picture
         createdAt
         updatedAt
+        username
       }
       createdAt
       updatedAt
@@ -155,13 +222,14 @@ export const onUpdateUser = /* GraphQL */ `
         createdAt
         updatedAt
       }
-      reviews {
+      ratings {
         id
-        isbn
-        totalRating
-        ratings
+        score
+        description
+        picture
         createdAt
         updatedAt
+        username
       }
       createdAt
       updatedAt
@@ -192,13 +260,14 @@ export const onDeleteUser = /* GraphQL */ `
         createdAt
         updatedAt
       }
-      reviews {
+      ratings {
         id
-        isbn
-        totalRating
-        ratings
+        score
+        description
+        picture
         createdAt
         updatedAt
+        username
       }
       createdAt
       updatedAt

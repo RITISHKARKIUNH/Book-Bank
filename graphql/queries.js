@@ -7,7 +7,16 @@ export const getReview = /* GraphQL */ `
       id
       isbn
       totalRating
-      ratings
+      totalRatingScore
+      ratings {
+        id
+        score
+        description
+        picture
+        createdAt
+        updatedAt
+        username
+      }
       createdAt
       updatedAt
     }
@@ -24,9 +33,51 @@ export const listReviews = /* GraphQL */ `
         id
         isbn
         totalRating
-        ratings
+        totalRatingScore
+        ratings {
+          id
+          score
+          description
+          picture
+          createdAt
+          updatedAt
+          username
+        }
         createdAt
         updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const getUserRating = /* GraphQL */ `
+  query GetUserRating($id: ID!) {
+    getUserRating(id: $id) {
+      id
+      score
+      description
+      picture
+      createdAt
+      updatedAt
+      username
+    }
+  }
+`;
+export const listUserRatings = /* GraphQL */ `
+  query ListUserRatings(
+    $filter: ModelUserRatingFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listUserRatings(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        score
+        description
+        picture
+        createdAt
+        updatedAt
+        username
       }
       nextToken
     }
@@ -135,13 +186,14 @@ export const getUser = /* GraphQL */ `
         createdAt
         updatedAt
       }
-      reviews {
+      ratings {
         id
-        isbn
-        totalRating
-        ratings
+        score
+        description
+        picture
         createdAt
         updatedAt
+        username
       }
       createdAt
       updatedAt
@@ -177,13 +229,14 @@ export const listUsers = /* GraphQL */ `
           createdAt
           updatedAt
         }
-        reviews {
+        ratings {
           id
-          isbn
-          totalRating
-          ratings
+          score
+          description
+          picture
           createdAt
           updatedAt
+          username
         }
         createdAt
         updatedAt

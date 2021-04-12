@@ -10,7 +10,16 @@ export const createReview = /* GraphQL */ `
       id
       isbn
       totalRating
-      ratings
+      totalRatingScore
+      ratings {
+        id
+        score
+        description
+        picture
+        createdAt
+        updatedAt
+        username
+      }
       createdAt
       updatedAt
     }
@@ -25,7 +34,16 @@ export const updateReview = /* GraphQL */ `
       id
       isbn
       totalRating
-      ratings
+      totalRatingScore
+      ratings {
+        id
+        score
+        description
+        picture
+        createdAt
+        updatedAt
+        username
+      }
       createdAt
       updatedAt
     }
@@ -40,9 +58,66 @@ export const deleteReview = /* GraphQL */ `
       id
       isbn
       totalRating
-      ratings
+      totalRatingScore
+      ratings {
+        id
+        score
+        description
+        picture
+        createdAt
+        updatedAt
+        username
+      }
       createdAt
       updatedAt
+    }
+  }
+`;
+export const createUserRating = /* GraphQL */ `
+  mutation CreateUserRating(
+    $input: CreateUserRatingInput!
+    $condition: ModelUserRatingConditionInput
+  ) {
+    createUserRating(input: $input, condition: $condition) {
+      id
+      score
+      description
+      picture
+      createdAt
+      updatedAt
+      username
+    }
+  }
+`;
+export const updateUserRating = /* GraphQL */ `
+  mutation UpdateUserRating(
+    $input: UpdateUserRatingInput!
+    $condition: ModelUserRatingConditionInput
+  ) {
+    updateUserRating(input: $input, condition: $condition) {
+      id
+      score
+      description
+      picture
+      createdAt
+      updatedAt
+      username
+    }
+  }
+`;
+export const deleteUserRating = /* GraphQL */ `
+  mutation DeleteUserRating(
+    $input: DeleteUserRatingInput!
+    $condition: ModelUserRatingConditionInput
+  ) {
+    deleteUserRating(input: $input, condition: $condition) {
+      id
+      score
+      description
+      picture
+      createdAt
+      updatedAt
+      username
     }
   }
 `;
@@ -139,13 +214,14 @@ export const createUser = /* GraphQL */ `
         createdAt
         updatedAt
       }
-      reviews {
+      ratings {
         id
-        isbn
-        totalRating
-        ratings
+        score
+        description
+        picture
         createdAt
         updatedAt
+        username
       }
       createdAt
       updatedAt
@@ -179,13 +255,14 @@ export const updateUser = /* GraphQL */ `
         createdAt
         updatedAt
       }
-      reviews {
+      ratings {
         id
-        isbn
-        totalRating
-        ratings
+        score
+        description
+        picture
         createdAt
         updatedAt
+        username
       }
       createdAt
       updatedAt
@@ -219,13 +296,14 @@ export const deleteUser = /* GraphQL */ `
         createdAt
         updatedAt
       }
-      reviews {
+      ratings {
         id
-        isbn
-        totalRating
-        ratings
+        score
+        description
+        picture
         createdAt
         updatedAt
+        username
       }
       createdAt
       updatedAt
