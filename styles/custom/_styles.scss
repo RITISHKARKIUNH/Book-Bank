@@ -149,3 +149,17 @@ header{
 .white-image{
     filter: brightness(0) invert(1);
 }
+
+// styling form group
+.book-form{
+    .form-group{
+        .input-group{
+            input{
+                width:100%;
+            }
+        }
+    }
+    input[type="file"] {
+        display: none;
+    }
+}

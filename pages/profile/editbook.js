@@ -212,7 +212,7 @@ function EditBook({ bookData }) {
                             </div>
 
                             {
-                                picture && <img src={localImage ? localImage : picture} className="mt-4" />
+                                picture && <img src={localImage ? localImage : picture} className="mt-3 mb-3 rounded d-block img-thumbnail" />
                             }
 
                             <input

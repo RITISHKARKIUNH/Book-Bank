@@ -5,6 +5,7 @@ function ErrorToast({ message }) {
                 <img className="white-image" src="/logo.png" alt="book bank" />
             </div>
             <div className="right">
+                <h5>Operation Failure !</h5>
                 <p>{message}</p>
             </div>
         </div>

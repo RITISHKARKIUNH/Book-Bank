@@ -6,3 +6,5 @@ export { default as PageNotFound } from './pageNotFound';
 export { default as Picture } from './picture';
 export { default as SucessToast } from './sucessToast';
 export { default as ErrorToast } from './errorToast';
+export { default as Toaster } from './toaster';
+export { default as ImageUploader } from './imageUploader';

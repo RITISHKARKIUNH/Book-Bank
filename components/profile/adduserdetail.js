@@ -174,7 +174,7 @@ const AddUserDetail = ({ user, mode, onToastEvent }) => {
                             image &&
                             <div className="form-group">
                                 <label className="form-control-label">Profile Image</label>
-                                <img src={localImage ? localImage : image} className="mt-4" className="rounded d-block img-thumbnail" />
+                                <img src={localImage ? localImage : image} className="mt-4 rounded d-block img-thumbnail" />
                             </div>
                         }
 

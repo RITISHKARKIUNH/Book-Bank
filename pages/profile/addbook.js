@@ -6,22 +6,12 @@ import SimpleMDE from "react-simplemde-editor";
 import "easymde/dist/easymde.min.css";
 import CreatableSelect from 'react-select/creatable';
 import Select from 'react-select';
+import { useForm, Controller } from "react-hook-form";
 import { createBook } from '../../graphql/mutations';
-import { Input } from '../../components/common';
+import { Toaster, ImageUploader } from '../../components/common';
 import { makeBookStatusOptions, makeCategoryOptions, createOption } from '../../lib/commondata';
 import WithProfileLayout from '../../hoc/withprofilelayout';
 
-const initialState = {
-    title: '',
-    description: '',
-    category: [],
-    isbn: '',
-    author: '',
-    condition: '',
-    price: '',
-    publication: '',
-    picture: ''
-}
 
 export const selectStyle = {
     control: (base, state) => ({
@@ -33,17 +23,12 @@ export const selectStyle = {
 };
 
 function AddBook() {
-    const [book, setBook] = useState(initialState);
     const [image, setImage] = useState(null);
     const [categoryValues, setCategoryValues] = useState(null);
-    const [stateValues, setStatusValues] = useState(null);
+    const [description, setDescription] = useState('');
     const hiddenFileInput = useRef(null);
-    const { title, description, isbn, condition, price, publication, category, author } = book;
     const router = useRouter();
-
-    function onValueChange(e) {
-        setBook(() => ({ ...book, [e.target.name]: e.target.value }));
-    }
+    const { register, handleSubmit, watch, formState: { errors }, control } = useForm();
 
     function setCategory(values) {
         let category = [];
@@ -55,11 +40,6 @@ function AddBook() {
         setBook(() => ({ ...book, category }));
     }
 
-    function handleCategoryChange(newValue, actionMeta) {
-        setCategoryValues(newValue);
-        setCategory(newValue);
-    }
-
     function handleCategoryCreate(inputValue) {
         console.log(inputValue);
         const newCategory = createOption(inputValue);
@@ -69,19 +49,46 @@ function AddBook() {
         setCategory(newCategories);
     }
 
-    function handleConditionChange(newValue, actionMeta) {
-        setStatusValues(newValue);
-        setBook(() => ({ ...book, condition: newValue.label }));
-    }
+    function handleChange(e) {
+        e.stopPropagation();
+        const fileUploaded = e.target.files[0];
+        if (!fileUploaded) return;
+        setImage(fileUploaded);
+    };
 
-
-    async function createNewBook() {
-        if (!title || !description || !condition || !price || !publication || !isbn || !category || !author) return;
+    const onSubmit = async data => {
+        console.log(data);
+        let { author, category, condition, isbn, price, publication, title } = data;
         const id = uuid();
+        let extractedCategory = [];
+        if (category && category.length > 0) {
+            category.forEach(c => {
+                extractedCategory.push(c.label)
+            });
+            category = extractedCategory;
+        }
+        if (condition && Object.keys(condition).length > 0) {
+            condition = condition.label;
+        }
+
+        //construct book object
+        let book = {};
         book.id = id;
+        book.author = author;
+        book.category = category;
+        book.condition = condition;
+        book.isbn = isbn;
+        book.price = price;
+        book.publication = publication;
+        book.title = title;
+        if (description.length > 0) {
+            book.description = description;
+        }
 
-        console.log(book);
-
+        if (!title || !description || !condition || !price || !publication || !isbn || !category || !author) {
+            Toaster('Required data for book are missing', true);
+            return;
+        }
 
         try {
             // If there is an image uploaded, store it in S3 and add it to the book metadata
@@ -96,21 +103,11 @@ function AddBook() {
                 variables: { input: book },
                 authMode: "AMAZON_COGNITO_USER_POOLS"
             });
-
+            Toaster('Book sucessfully uploaded');
             router.push(`/books/${id}`);
         } catch (e) {
-            console.error(e, "error happened");
+            Toaster(e.message, true);
         }
-    }
-
-    async function uploadImage() {
-        hiddenFileInput.current.click();
-    };
-
-    function handleChange(e) {
-        const fileUploaded = e.target.files[0];
-        if (!fileUploaded) return;
-        setImage(fileUploaded);
     };
 
     return (
@@ -130,142 +127,131 @@ function AddBook() {
                         </div>
 
                         <div className="card-body">
-
-                            <div className="form-group">
-                                <label className="form-control-label">Book title</label>
-                                <div className="input-group">
-                                    <Input
-                                        type="text"
-                                        onChange={onValueChange}
-                                        name="title"
-                                        placeholder="Book title"
-                                        value={book.title}
-                                        required
-                                    />
+                            <form className="book-form" onSubmit={handleSubmit(onSubmit)}>
+                                <div className="form-group">
+                                    <label className="form-control-label">Book title</label>
+                                    <div className="input-group">
+                                        <input placeholder="Book title" className="form-control" {...register("title", { required: "Book title is required" })} />
+                                        {errors.title && <span className="text-danger">{errors.title.message}</span>}
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div className="form-group">
-                                <label className="form-control-label">Book Author</label>
-                                <div className="input-group">
-                                    <Input
-                                        type="text"
-                                        onChange={onValueChange}
-                                        name="author"
-                                        placeholder="Book author"
-                                        value={book.author}
-                                        required
-                                    />
+                                <div className="form-group">
+                                    <label className="form-control-label">Book Author</label>
+                                    <div className="input-group">
+                                        <input placeholder="Book author" className="form-control" {...register("author", { required: "Book author is required" })} />
+                                        {errors.author && <span className="text-danger">{errors.author.message}</span>}
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div className="form-group">
-                                <label className="form-control-label">Book Condition</label>
-                                <div className="input-group">
-                                    <Select
-                                        className="bookbank-select"
-                                        onChange={handleConditionChange}
-                                        options={makeBookStatusOptions()}
-                                        value={stateValues}
-                                        placeholder="select book state"
-                                        required
-                                        styles={selectStyle}
-                                    />
+                                <div className="form-group">
+                                    <label className="form-control-label">Book Condition</label>
+                                    <div className="input-group">
+                                        <Controller
+                                            name="condition"
+                                            control={control}
+                                            render={({ field }) => <Select
+                                                {...field}
+                                                className="bookbank-select"
+                                                options={makeBookStatusOptions()}
+                                                placeholder="select book state"
+                                                required
+                                                styles={selectStyle}
+                                            />}
+                                        />
+                                        {errors.condition && <span className="text-danger">This field is required</span>}
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div className="form-group">
-                                <label className="form-control-label">Categories</label>
-                                <div className="input-group">
-                                    <CreatableSelect
-                                        isMulti
-                                        className="bookbank-select"
-                                        onChange={handleCategoryChange}
-                                        options={makeCategoryOptions()}
-                                        onCreateOption={handleCategoryCreate}
-                                        value={categoryValues}
-                                        placeholder="select categories"
-                                        required
-                                        styles={selectStyle}
-                                    />
+                                <div className="form-group">
+                                    <label className="form-control-label">Categories</label>
+                                    <div className="input-group">
+                                        <Controller
+                                            name="category"
+                                            control={control}
+                                            render={({ field }) => <CreatableSelect
+                                                {...field}
+                                                isMulti
+                                                className="bookbank-select"
+                                                options={makeCategoryOptions()}
+                                                onCreateOption={handleCategoryCreate}
+                                                placeholder="select categories"
+                                                required
+                                                styles={selectStyle}
+                                            />}
+                                        />
+                                        {errors.category && <span className="text-danger">This field is required</span>}
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div className="form-group">
-                                <label className="form-control-label">Book ISBN</label>
-                                <div className="input-group">
-                                    <Input
-                                        type="text"
-                                        onChange={onValueChange}
-                                        name="isbn"
-                                        placeholder="Isbn"
-                                        value={book.isbn}
-                                        required
-                                    />
+                                <div className="form-group">
+                                    <label className="form-control-label">Book ISBN</label>
+                                    <div className="input-group">
+                                        <input placeholder="Isbn" className="form-control" {...register("isbn", { required: "Isbn is required" })} />
+                                        {errors.isbn && <span className="text-danger">{errors.isbn.message}</span>}
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div className="form-group">
-                                <label className="form-control-label">Book Price</label>
-                                <div className="input-group">
-                                    <Input
-                                        type="text"
-                                        onChange={onValueChange}
-                                        name="price"
-                                        placeholder="Book Price"
-                                        value={book.price}
-                                        required
-                                    />
+                                <div className="form-group">
+                                    <label className="form-control-label">Book Price</label>
+                                    <div className="input-group">
+                                        <input placeholder="Book Price" className="form-control" {...register("price", { required: "Book Price is required" })} />
+                                        {errors.price && <span className="text-danger">{errors.price.message}</span>}
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div className="form-group">
-                                <label className="form-control-label">Book Publication</label>
-                                <div className="input-group">
-                                    <Input
-                                        type="text"
-                                        onChange={onValueChange}
-                                        name="publication"
-                                        placeholder="Book publication"
-                                        value={book.publication}
-                                        required
-                                    />
+                                <div className="form-group">
+                                    <label className="form-control-label">Book Publication</label>
+                                    <div className="input-group">
+                                        <input placeholder="Book Publication" className="form-control" {...register("publication", { required: "Book publication required" })} />
+                                        {errors.publication && <span className="text-danger">{errors.publication.message}</span>}
+                                    </div>
                                 </div>
-                            </div>
 
-                            {
-                                image && (
-                                    <img src={URL.createObjectURL(image)} className="my-4" />
-                                )
-                            }
+                                {/* {
+                                    image && (
+                                        <img src={URL.createObjectURL(image)} className="my-4" />
+                                    )
+                                } */}
 
-                            <div className="form-group">
-                                <label className="form-control-label">Book Description</label>
-                                <SimpleMDE value={book.content} onChange={value => setBook({ ...book, description: value })} />
-                            </div>
+                                <div className="form-group">
+                                    <label className="form-control-label">Book Description</label>
+                                    <SimpleMDE value={description} onChange={value => setDescription(value)} />
+                                </div>
 
-                            <input
-                                type="file"
-                                ref={hiddenFileInput}
-                                className="absolute w-0 h-0"
-                                style={{ position: "absolute", height: 0, width: 0 }}
-                                onChange={handleChange}
-                            />
+                                <input
+                                    type="file"
+                                    ref={hiddenFileInput}
+                                    className="absolute w-0 h-0"
+                                    style={{ position: "absolute", height: 0, width: 0 }}
+                                    onChange={handleChange}
+                                    onClick={e => { e.stopPropagation(); e.preventDefault() }}
+                                />
 
-                            <button
-                                className="btn btn-sm btn-primary btn-icon rounded-pill"
-                                onClick={uploadImage}
-                            >
-                                Upload Book Image
-                           </button>
+                                {/* <button
+                                    className="btn btn-sm btn-primary btn-icon rounded-pill"
+                                    onClick={e => {
+                                        uploadImage();
+                                        e.stopPropagation();
+                                    }}
+                                >
+                                    Upload Book Image
+                                </button> */}
 
-                            <button
-                                type="button"
-                                className="btn btn-sm btn-primary btn-icon rounded-pill"
-                                onClick={createNewBook}
-                            >
-                                Add Book
-                            </button>
+                                <ImageUploader
+                                    imageUploadHandler={handleChange}
+                                    image={image}
+                                />
+
+                                {/* <button
+                                    type="button"
+                                    className="btn btn-sm btn-primary btn-icon rounded-pill"
+                                    onClick={createNewBook}
+                                >
+                                    Add Book
+                                </button> */}
+                                <button type="submit" className="btn btn-sm btn-primary btn-icon rounded-pill">Add Book</button>
+                            </form>
                         </div>
                     </div>
                 </div>
