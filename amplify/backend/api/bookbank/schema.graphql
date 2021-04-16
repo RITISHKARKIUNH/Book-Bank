@@ -18,8 +18,7 @@ type Book @model
 }
 
 type Review @model
-@key(name: "overallReviewsForBook", fields: ["isbn"], queryField: "overallReviewsForBook")
-{
+@key(name: "overallReviewsForBook", fields: ["isbn"], queryField: "overallReviewsForBook"){
   id : ID!
   isbn : String!
   totalRating : Int

@@ -8,7 +8,7 @@ import { Layout } from '../../components/common';
 import { getUser, booksByUsername } from "../../graphql/queries";
 import Picture from '../../components/common/picture';
 import AddReview from '../../components/review/addReview';
-import { reviewsForBook } from '../../graphql/queries';
+import { overallReviewsForBook } from '../../graphql/queries';
 
 export default function BookDetail({ book, bookid }) {
     if (!book) {
@@ -24,7 +24,7 @@ export default function BookDetail({ book, bookid }) {
     const [userID, setUserId] = useState(null);
     const [addedByUser, setAddedByUser] = useState(false);
     const [isSaved, setIsSaved] = useState(false);
-    const [reviews, setReviews] = useState(null);
+    const [overAllReview, setOverAllReview] = useState(null);
 
     useEffect(() => {
         // check if saved in local storage before
@@ -40,13 +40,13 @@ export default function BookDetail({ book, bookid }) {
     async function getBookRatings() {
         const { isbn } = book;
         const bookData = await API.graphql({
-            query: reviewsForBook, variables: { isbn }
+            query: overallReviewsForBook, variables: { isbn }
         });
 
-        const { items } = bookData.data.reviewsForBook;
+        const { items } = bookData.data.overallReviewsForBook;
         console.log(items);
         if(items && items.length > 0){
-            setReviews(items[0]);
+            setOverAllReview(items[0]);
         }
     }
 
@@ -240,7 +240,7 @@ export default function BookDetail({ book, bookid }) {
                                 </div>
                             </div>
                             {!addedByUser && userID &&
-                                <AddReview userId={userID} reviews={reviews} book={book} />
+                                <AddReview userId={userID} overAllReview={overAllReview} isbn={book.isbn} />
                             }
                         </div>
                     </div>

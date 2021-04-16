@@ -5,13 +5,20 @@ import { StarRating, Toaster, ImageUploader } from '../common';
 import { v4 as uuid } from 'uuid';
 import { createUserRating, updateReview } from '../../graphql/mutations';
 
-function AddReview({ userId, reviews }) {
-    console.log(userId, reviews);
-    if (!userId) return null;
+function AddReview({ userId, overAllReview, isbn }) {
+    console.log(userId, overAllReview);
+    if (!userId || !overAllReview || !isbn) return null;
     const [rating, setRating] = useState(0);
     const [uploadingReview, setUploadingReview] = useState(false);
     const [image, setImage] = useState(null);
     const { register, handleSubmit, formState: { errors } } = useForm();
+
+    function resetForm(e) {
+        //reset the form after adding review
+        e.target.reset();
+        setImage(null);
+        setRating(0);
+    }
 
     const onSubmit = async (data, e) => {
         setUploadingReview(true);
@@ -23,9 +30,11 @@ function AddReview({ userId, reviews }) {
         review.description = description;
         review.score = rating;
         review.username = userId;
+        review.isbn = isbn;
 
-        if (!title || !description || rating === 0) {
+        if (!title || !description || rating === 0 || !isbn) {
             Toaster('Required data for review are missing', true);
+            resetForm(e);
             return;
         }
 
@@ -45,38 +54,36 @@ function AddReview({ userId, reviews }) {
                 setUploadingReview(false);
                 updateBookRating(response.data.createUserRating);
             }
-            Toaster('Review sucessfully added');
         } catch (err) {
             Toaster(err.message, true);
         }
 
-        //reset the form after adding review
-        e.target.reset();
-        setImage(null);
-        setRating(0);
+        resetForm(e);
     }
 
-    async function updateBookRating(rating){
-        let updatedReviews = reviews;
-        if(!updatedReviews.ratings){
-            updatedReviews.ratings = [];
-        }
-        if (updatedReviews) {
-            updatedReviews.totalRating +=1;
-            updatedReviews.totalRatingScore = ((parseFloat(reviews.totalRatingScore) * reviews.totalRating) + rating.score) /  updatedReviews.totalRating;
-            updatedReviews.totalRatingScore = parseFloat(updatedReviews.totalRatingScore).toFixed(1);
-            updatedReviews.ratings = updatedReviews.ratings.push(rating);
-            const response = await API.graphql({
-                query: updateReview,
-                variables: { input: updatedReviews},
-                authMode: "AMAZON_COGNITO_USER_POOLS"
-            });
+    async function updateBookRating(rating) {
+        try {
+            let updatedReviews = overAllReview;
+            if (updatedReviews.createdAt) delete updatedReviews.createdAt;
+            if (updatedReviews.updatedAt) delete updatedReviews.updatedAt;
 
-            if(response && response.data){
-                window.location.reload();
+            if (updatedReviews) {
+                updatedReviews.totalRating += 1;
+                updatedReviews.totalRatingScore = ((parseFloat(updatedReviews.totalRatingScore) * updatedReviews.totalRating) + rating.score) / updatedReviews.totalRating;
+                updatedReviews.totalRatingScore = parseFloat(updatedReviews.totalRatingScore).toFixed(1);
+                const response = await API.graphql({
+                    query: updateReview,
+                    variables: { input: updatedReviews }
+                });
+
+                if (response && response.data) {
+                    Toaster('Review sucessfully added');
+                    window.location.reload();
+                }
             }
+        } catch (e) {
+            Toaster('Problem in updating overall review', true);
         }
-
     }
 
     function handleChange(e) {
