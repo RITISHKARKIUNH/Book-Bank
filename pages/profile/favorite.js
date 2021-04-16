@@ -10,12 +10,13 @@ function FavoriteBooks({ user }) {
         let items = JSON.parse(window.localStorage.getItem('favoriteList'));
         let favList = [];
         console.log(items);
-
-        items.forEach(book => {
-            if (book.addedBy === user.attributes.sub) {
-                favList.push(book);
-            }
-        });
+        if (items && items.length > 0) {
+            items.forEach(book => {
+                if (book.addedBy === user.attributes.sub) {
+                    favList.push(book);
+                }
+            });
+        }
 
         setFavBooks(favList);
     }, []);
@@ -28,10 +29,10 @@ function FavoriteBooks({ user }) {
                 </div>
                 <div className="container">
                     {
-                        favBooks.length === 0 && <h4 className="text-white"> You have no books in your favorite list </h4>
+                        (!favBooks || favBooks.length === 0) && <h4 className="text-white"> You have no books in your favorite list </h4>
                     }
                     {
-                        favBooks.length > 0 &&
+                        favBooks && favBooks.length > 0 &&
                         <div className="row">
                             {
                                 favBooks.map((book) => {

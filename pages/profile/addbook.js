@@ -7,7 +7,7 @@ import "easymde/dist/easymde.min.css";
 import CreatableSelect from 'react-select/creatable';
 import Select from 'react-select';
 import { useForm, Controller } from "react-hook-form";
-import { createBook } from '../../graphql/mutations';
+import { createBook, createReview } from '../../graphql/mutations';
 import { Toaster, ImageUploader } from '../../components/common';
 import { makeBookStatusOptions, makeCategoryOptions, createOption } from '../../lib/commondata';
 import WithProfileLayout from '../../hoc/withprofilelayout';
@@ -103,6 +103,17 @@ function AddBook() {
                 variables: { input: book },
                 authMode: "AMAZON_COGNITO_USER_POOLS"
             });
+
+            await API.graphql({
+                query: createReview,
+                variables: { input: {
+                    id : uuid(),
+                    isbn: isbn,
+                    totalRating : 0,
+                    totalRatingScore : '0'
+                }}
+            });
+
             Toaster('Book sucessfully uploaded');
             router.push(`/books/${id}`);
         } catch (e) {

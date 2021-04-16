@@ -8,3 +8,4 @@ export { default as SucessToast } from './sucessToast';
 export { default as ErrorToast } from './errorToast';
 export { default as Toaster } from './toaster';
 export { default as ImageUploader } from './imageUploader';
+export { default as StarRating } from './starRating';

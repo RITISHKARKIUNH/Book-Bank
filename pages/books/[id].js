@@ -7,6 +7,8 @@ import { listBooks, getBook } from '../../graphql/queries'
 import { Layout } from '../../components/common';
 import { getUser, booksByUsername } from "../../graphql/queries";
 import Picture from '../../components/common/picture';
+import AddReview from '../../components/review/addReview';
+import { reviewsForBook } from '../../graphql/queries';
 
 export default function BookDetail({ book, bookid }) {
     if (!book) {
@@ -22,6 +24,7 @@ export default function BookDetail({ book, bookid }) {
     const [userID, setUserId] = useState(null);
     const [addedByUser, setAddedByUser] = useState(false);
     const [isSaved, setIsSaved] = useState(false);
+    const [reviews, setReviews] = useState(null);
 
     useEffect(() => {
         // check if saved in local storage before
@@ -31,7 +34,21 @@ export default function BookDetail({ book, bookid }) {
         }
 
         checkUser();
+        getBookRatings();
     }, []);
+
+    async function getBookRatings() {
+        const { isbn } = book;
+        const bookData = await API.graphql({
+            query: reviewsForBook, variables: { isbn }
+        });
+
+        const { items } = bookData.data.reviewsForBook;
+        console.log(items);
+        if(items && items.length > 0){
+            setReviews(items[0]);
+        }
+    }
 
     async function checkUser() {
         try {
@@ -57,7 +74,7 @@ export default function BookDetail({ book, bookid }) {
             if (user && user.listedBooks) {
                 const books = user.listedBooks.data?.booksByUsername?.items;
                 let items = JSON.parse(window.localStorage.getItem('favoriteList'));
-       
+
                 books.forEach(book => {
                     if (book.id === bookid) {
                         setAddedByUser(true);
@@ -213,7 +230,7 @@ export default function BookDetail({ book, bookid }) {
                                                 </div>
                                             }
                                             {
-                                                addedByUser && userID && 
+                                                addedByUser && userID &&
                                                 <div class="alert alert-info mt-5" role="alert">
                                                     Added by you
                                                 </div>
@@ -222,6 +239,9 @@ export default function BookDetail({ book, bookid }) {
                                     </div>
                                 </div>
                             </div>
+                            {!addedByUser && userID &&
+                                <AddReview userId={userID} reviews={reviews} book={book} />
+                            }
                         </div>
                     </div>
                 </div>

@@ -44,7 +44,7 @@ export default function Home() {
             !loadingBooks && books.length === 0 &&
             <div className="mt-3">
               <h4>There are no books in our platform to show currently. Be the first book seller in our platform</h4>
-              <a href="/profile" className="btn btn-lg btn-primary rounded-pill hover-translate-y-n3 btn-icon d-none d-xl-inline-block scroll-me">
+              <a href="/profile/addbook" className="btn btn-lg btn-primary rounded-pill hover-translate-y-n3 btn-icon d-none d-xl-inline-block scroll-me">
                 <span className="btn-inner--icon"><i className="fas fa-book"></i></span>
                 <span className="btn-inner--text">Add the first book</span>
               </a>

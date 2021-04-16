@@ -8,15 +8,6 @@ export const onCreateReview = /* GraphQL */ `
       isbn
       totalRating
       totalRatingScore
-      ratings {
-        id
-        score
-        description
-        picture
-        createdAt
-        updatedAt
-        username
-      }
       createdAt
       updatedAt
     }
@@ -29,15 +20,6 @@ export const onUpdateReview = /* GraphQL */ `
       isbn
       totalRating
       totalRatingScore
-      ratings {
-        id
-        score
-        description
-        picture
-        createdAt
-        updatedAt
-        username
-      }
       createdAt
       updatedAt
     }
@@ -50,56 +32,8 @@ export const onDeleteReview = /* GraphQL */ `
       isbn
       totalRating
       totalRatingScore
-      ratings {
-        id
-        score
-        description
-        picture
-        createdAt
-        updatedAt
-        username
-      }
       createdAt
       updatedAt
-    }
-  }
-`;
-export const onCreateUserRating = /* GraphQL */ `
-  subscription OnCreateUserRating {
-    onCreateUserRating {
-      id
-      score
-      description
-      picture
-      createdAt
-      updatedAt
-      username
-    }
-  }
-`;
-export const onUpdateUserRating = /* GraphQL */ `
-  subscription OnUpdateUserRating {
-    onUpdateUserRating {
-      id
-      score
-      description
-      picture
-      createdAt
-      updatedAt
-      username
-    }
-  }
-`;
-export const onDeleteUserRating = /* GraphQL */ `
-  subscription OnDeleteUserRating {
-    onDeleteUserRating {
-      id
-      score
-      description
-      picture
-      createdAt
-      updatedAt
-      username
     }
   }
 `;
@@ -160,6 +94,51 @@ export const onDeleteBook = /* GraphQL */ `
     }
   }
 `;
+export const onCreateUserRating = /* GraphQL */ `
+  subscription OnCreateUserRating($username: String) {
+    onCreateUserRating(username: $username) {
+      id
+      score
+      isbn
+      description
+      picture
+      username
+      title
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onUpdateUserRating = /* GraphQL */ `
+  subscription OnUpdateUserRating($username: String) {
+    onUpdateUserRating(username: $username) {
+      id
+      score
+      isbn
+      description
+      picture
+      username
+      title
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onDeleteUserRating = /* GraphQL */ `
+  subscription OnDeleteUserRating($username: String) {
+    onDeleteUserRating(username: $username) {
+      id
+      score
+      isbn
+      description
+      picture
+      username
+      title
+      createdAt
+      updatedAt
+    }
+  }
+`;
 export const onCreateUser = /* GraphQL */ `
   subscription OnCreateUser($id: String) {
     onCreateUser(id: $id) {
@@ -169,32 +148,26 @@ export const onCreateUser = /* GraphQL */ `
       description
       phoneNumber
       image
-      favoriteBooks {
-        id
-        title
-        description
-        author
-        publication
-        isbn
-        category
-        condition
-        price
-        picture
-        username
-        createdAt
-        updatedAt
-      }
-      ratings {
-        id
-        score
-        description
-        picture
-        createdAt
-        updatedAt
-        username
-      }
       createdAt
       updatedAt
+      favoriteBooks {
+        items {
+          id
+          title
+          description
+          author
+          publication
+          isbn
+          category
+          condition
+          price
+          picture
+          username
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
     }
   }
 `;
@@ -207,32 +180,26 @@ export const onUpdateUser = /* GraphQL */ `
       description
       phoneNumber
       image
-      favoriteBooks {
-        id
-        title
-        description
-        author
-        publication
-        isbn
-        category
-        condition
-        price
-        picture
-        username
-        createdAt
-        updatedAt
-      }
-      ratings {
-        id
-        score
-        description
-        picture
-        createdAt
-        updatedAt
-        username
-      }
       createdAt
       updatedAt
+      favoriteBooks {
+        items {
+          id
+          title
+          description
+          author
+          publication
+          isbn
+          category
+          condition
+          price
+          picture
+          username
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
     }
   }
 `;
@@ -245,32 +212,26 @@ export const onDeleteUser = /* GraphQL */ `
       description
       phoneNumber
       image
-      favoriteBooks {
-        id
-        title
-        description
-        author
-        publication
-        isbn
-        category
-        condition
-        price
-        picture
-        username
-        createdAt
-        updatedAt
-      }
-      ratings {
-        id
-        score
-        description
-        picture
-        createdAt
-        updatedAt
-        username
-      }
       createdAt
       updatedAt
+      favoriteBooks {
+        items {
+          id
+          title
+          description
+          author
+          publication
+          isbn
+          category
+          condition
+          price
+          picture
+          username
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
     }
   }
 `;

@@ -11,15 +11,6 @@ export const createReview = /* GraphQL */ `
       isbn
       totalRating
       totalRatingScore
-      ratings {
-        id
-        score
-        description
-        picture
-        createdAt
-        updatedAt
-        username
-      }
       createdAt
       updatedAt
     }
@@ -35,15 +26,6 @@ export const updateReview = /* GraphQL */ `
       isbn
       totalRating
       totalRatingScore
-      ratings {
-        id
-        score
-        description
-        picture
-        createdAt
-        updatedAt
-        username
-      }
       createdAt
       updatedAt
     }
@@ -59,65 +41,8 @@ export const deleteReview = /* GraphQL */ `
       isbn
       totalRating
       totalRatingScore
-      ratings {
-        id
-        score
-        description
-        picture
-        createdAt
-        updatedAt
-        username
-      }
       createdAt
       updatedAt
-    }
-  }
-`;
-export const createUserRating = /* GraphQL */ `
-  mutation CreateUserRating(
-    $input: CreateUserRatingInput!
-    $condition: ModelUserRatingConditionInput
-  ) {
-    createUserRating(input: $input, condition: $condition) {
-      id
-      score
-      description
-      picture
-      createdAt
-      updatedAt
-      username
-    }
-  }
-`;
-export const updateUserRating = /* GraphQL */ `
-  mutation UpdateUserRating(
-    $input: UpdateUserRatingInput!
-    $condition: ModelUserRatingConditionInput
-  ) {
-    updateUserRating(input: $input, condition: $condition) {
-      id
-      score
-      description
-      picture
-      createdAt
-      updatedAt
-      username
-    }
-  }
-`;
-export const deleteUserRating = /* GraphQL */ `
-  mutation DeleteUserRating(
-    $input: DeleteUserRatingInput!
-    $condition: ModelUserRatingConditionInput
-  ) {
-    deleteUserRating(input: $input, condition: $condition) {
-      id
-      score
-      description
-      picture
-      createdAt
-      updatedAt
-      username
     }
   }
 `;
@@ -187,6 +112,60 @@ export const deleteBook = /* GraphQL */ `
     }
   }
 `;
+export const createUserRating = /* GraphQL */ `
+  mutation CreateUserRating(
+    $input: CreateUserRatingInput!
+    $condition: ModelUserRatingConditionInput
+  ) {
+    createUserRating(input: $input, condition: $condition) {
+      id
+      score
+      isbn
+      description
+      picture
+      username
+      title
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const updateUserRating = /* GraphQL */ `
+  mutation UpdateUserRating(
+    $input: UpdateUserRatingInput!
+    $condition: ModelUserRatingConditionInput
+  ) {
+    updateUserRating(input: $input, condition: $condition) {
+      id
+      score
+      isbn
+      description
+      picture
+      username
+      title
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const deleteUserRating = /* GraphQL */ `
+  mutation DeleteUserRating(
+    $input: DeleteUserRatingInput!
+    $condition: ModelUserRatingConditionInput
+  ) {
+    deleteUserRating(input: $input, condition: $condition) {
+      id
+      score
+      isbn
+      description
+      picture
+      username
+      title
+      createdAt
+      updatedAt
+    }
+  }
+`;
 export const createUser = /* GraphQL */ `
   mutation CreateUser(
     $input: CreateUserInput!
@@ -199,32 +178,26 @@ export const createUser = /* GraphQL */ `
       description
       phoneNumber
       image
-      favoriteBooks {
-        id
-        title
-        description
-        author
-        publication
-        isbn
-        category
-        condition
-        price
-        picture
-        username
-        createdAt
-        updatedAt
-      }
-      ratings {
-        id
-        score
-        description
-        picture
-        createdAt
-        updatedAt
-        username
-      }
       createdAt
       updatedAt
+      favoriteBooks {
+        items {
+          id
+          title
+          description
+          author
+          publication
+          isbn
+          category
+          condition
+          price
+          picture
+          username
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
     }
   }
 `;
@@ -240,32 +213,26 @@ export const updateUser = /* GraphQL */ `
       description
       phoneNumber
       image
-      favoriteBooks {
-        id
-        title
-        description
-        author
-        publication
-        isbn
-        category
-        condition
-        price
-        picture
-        username
-        createdAt
-        updatedAt
-      }
-      ratings {
-        id
-        score
-        description
-        picture
-        createdAt
-        updatedAt
-        username
-      }
       createdAt
       updatedAt
+      favoriteBooks {
+        items {
+          id
+          title
+          description
+          author
+          publication
+          isbn
+          category
+          condition
+          price
+          picture
+          username
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
     }
   }
 `;
@@ -281,32 +248,26 @@ export const deleteUser = /* GraphQL */ `
       description
       phoneNumber
       image
-      favoriteBooks {
-        id
-        title
-        description
-        author
-        publication
-        isbn
-        category
-        condition
-        price
-        picture
-        username
-        createdAt
-        updatedAt
-      }
-      ratings {
-        id
-        score
-        description
-        picture
-        createdAt
-        updatedAt
-        username
-      }
       createdAt
       updatedAt
+      favoriteBooks {
+        items {
+          id
+          title
+          description
+          author
+          publication
+          isbn
+          category
+          condition
+          price
+          picture
+          username
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
     }
   }
 `;

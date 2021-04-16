@@ -4,8 +4,8 @@ import React from "react";
 const ImageUploader = ({ imageUploadHandler, image }) => {
     return (
         <>
-            <label for="book-image" class="btn btn-sm btn-primary btn-icon rounded-pill">
-                Choose Book Picture
+            <label htmlFor="book-image" className="btn btn-sm btn-primary btn-icon rounded-pill">
+                Select Image
             </label>
             <input id="book-image" className="btn p-0" type="file" onChange={imageUploadHandler} />
             <div className="image-container mt-3 mb-3">

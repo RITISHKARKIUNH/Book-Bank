@@ -17,22 +17,29 @@ type Book @model
   username : String
 }
 
-type Review @model {
+type Review @model
+@key(name: "overallReviewsForBook", fields: ["isbn"], queryField: "overallReviewsForBook")
+{
   id : ID!
   isbn : String!
   totalRating : Int
   totalRatingScore : String
-  ratings : [UserRating]
 }
 
-type UserRating @model {
+type UserRating @model 
+@key(name: "reviewsByUser", fields: ["username"], queryField: "reviewsByUser")
+@key(name: "reviewsByIsbn", fields: ["isbn"], queryField: "reviewsByIsbn")
+@auth(rules: [
+  { allow: owner, ownerField: "username" },
+  { allow: public, operations: [read] }
+]) {
   id: ID!
   score : Int!
+  isbn : String!
   description : String
   picture : String
-  createdAt : String!
-  updatedAt : String
   username : String!
+  title : String!
 }
 
 
@@ -47,6 +54,5 @@ type User @model
   description: String
   phoneNumber: String
   image: String
-  favoriteBooks : [Book]
-  ratings : [UserRating]
+  favoriteBooks : [Book] @connection
 }
