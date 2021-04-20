@@ -51,7 +51,7 @@ function UserReviewView({ user, onEdit }) {
                 </div>
                 <div className="container">
                     {reviewLoading && <h4> ... loading </h4>}
-                    {!reviewLoading && userReviews.length === 0 && <h4> You haven't added any book reviews yet </h4>}
+                    {!reviewLoading && (!userReviews || userReviews.length === 0 ) && <h4> You haven't added any book reviews yet </h4>}
                     {
                         userReviews && userReviews.length > 0 && userReviews.map(review => {
                             return (

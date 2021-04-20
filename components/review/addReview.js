@@ -5,8 +5,14 @@ import { StarRating, Toaster, ImageUploader } from '../common';
 import { v4 as uuid } from 'uuid';
 import { createUserRating, updateReview } from '../../graphql/mutations';
 
-function AddReview({ userId, overAllReview, isbn }) {
-    console.log(userId, overAllReview);
+function AddReview({ userId, overAllReview, isbn, user }) {
+    let userName = '';
+    let profilePicture = '';
+    if(user && user.profile){
+        const {firstName, lastName, image} = user.profile;
+        userName=`${firstName} ${lastName}`;
+        profilePicture = image;
+    }
     if (!userId || !overAllReview || !isbn) return null;
     const [rating, setRating] = useState(0);
     const [uploadingReview, setUploadingReview] = useState(false);
@@ -31,6 +37,10 @@ function AddReview({ userId, overAllReview, isbn }) {
         review.score = rating;
         review.username = userId;
         review.isbn = isbn;
+        if(userName.length > 0){
+            review.name = userName;
+            review.profile = profilePicture;
+        }
 
         if (!title || !description || rating === 0 || !isbn) {
             Toaster('Required data for review are missing', true);

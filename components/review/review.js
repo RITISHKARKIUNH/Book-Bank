@@ -5,8 +5,8 @@ function Review({ review }) {
     return (
         <div className="review">
             <div className="user">
-                <i className="fas fa-user-circle" />
-                User Id: {review.username}
+                {review.profile ? <Picture path={review.profile} style={{ width: "35px", height: "35px", borderRadius: "50%" }} alt="review image" className="rounded-circle mr-1 shadow" /> : <i className="fas fa-user-circle" />}
+                User : {review.name ? review.name : review.username}
             </div>
             <div className="title">
                 <StarRating

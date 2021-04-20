@@ -63,6 +63,8 @@ export const createBook = /* GraphQL */ `
       price
       picture
       username
+      availability
+      boughtBy
       createdAt
       updatedAt
     }
@@ -85,6 +87,8 @@ export const updateBook = /* GraphQL */ `
       price
       picture
       username
+      availability
+      boughtBy
       createdAt
       updatedAt
     }
@@ -107,6 +111,8 @@ export const deleteBook = /* GraphQL */ `
       price
       picture
       username
+      availability
+      boughtBy
       createdAt
       updatedAt
     }
@@ -125,6 +131,8 @@ export const createUserRating = /* GraphQL */ `
       picture
       username
       title
+      profile
+      name
       createdAt
       updatedAt
     }
@@ -143,6 +151,8 @@ export const updateUserRating = /* GraphQL */ `
       picture
       username
       title
+      profile
+      name
       createdAt
       updatedAt
     }
@@ -161,6 +171,8 @@ export const deleteUserRating = /* GraphQL */ `
       picture
       username
       title
+      profile
+      name
       createdAt
       updatedAt
     }
@@ -193,6 +205,8 @@ export const createUser = /* GraphQL */ `
           price
           picture
           username
+          availability
+          boughtBy
           createdAt
           updatedAt
         }
@@ -228,6 +242,8 @@ export const updateUser = /* GraphQL */ `
           price
           picture
           username
+          availability
+          boughtBy
           createdAt
           updatedAt
         }
@@ -263,6 +279,8 @@ export const deleteUser = /* GraphQL */ `
           price
           picture
           username
+          availability
+          boughtBy
           createdAt
           updatedAt
         }

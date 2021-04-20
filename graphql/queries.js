@@ -73,6 +73,8 @@ export const getBook = /* GraphQL */ `
       price
       picture
       username
+      availability
+      boughtBy
       createdAt
       updatedAt
     }
@@ -97,6 +99,8 @@ export const listBooks = /* GraphQL */ `
         price
         picture
         username
+        availability
+        boughtBy
         createdAt
         updatedAt
       }
@@ -131,6 +135,8 @@ export const booksByUsername = /* GraphQL */ `
         price
         picture
         username
+        availability
+        boughtBy
         createdAt
         updatedAt
       }
@@ -148,6 +154,8 @@ export const getUserRating = /* GraphQL */ `
       picture
       username
       title
+      profile
+      name
       createdAt
       updatedAt
     }
@@ -168,6 +176,8 @@ export const listUserRatings = /* GraphQL */ `
         picture
         username
         title
+        profile
+        name
         createdAt
         updatedAt
       }
@@ -198,6 +208,8 @@ export const reviewsByUser = /* GraphQL */ `
         picture
         username
         title
+        profile
+        name
         createdAt
         updatedAt
       }
@@ -228,6 +240,8 @@ export const reviewsByIsbn = /* GraphQL */ `
         picture
         username
         title
+        profile
+        name
         createdAt
         updatedAt
       }
@@ -259,6 +273,8 @@ export const getUser = /* GraphQL */ `
           price
           picture
           username
+          availability
+          boughtBy
           createdAt
           updatedAt
         }

@@ -33,7 +33,7 @@ function DisplayReviews(isbn) {
     }
 
     if (loading) return <h4>...loading</h4>
-    if (!loading && reviews.length === 0) return <h4> ...no reviews yet </h4>
+    if (!loading && (!reviews || reviews.length === 0)) return <h4> No reviews yet </h4>
     if (!loading && reviews.length > 0) {
         return (
             <div>

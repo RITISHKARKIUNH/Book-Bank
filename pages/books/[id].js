@@ -24,6 +24,7 @@ export default function BookDetail({ book, bookid }) {
     }
 
     const [userID, setUserId] = useState(null);
+    const [user, setUser] = useState(null);
     const [addedByUser, setAddedByUser] = useState(false);
     const [isSaved, setIsSaved] = useState(false);
     const [overAllReview, setOverAllReview] = useState(null);
@@ -71,6 +72,7 @@ export default function BookDetail({ book, bookid }) {
                 });
 
                 user = { ...user, profile: userData.data.getUser, listedBooks }
+                setUser(user);
             }
 
             if (user && user.listedBooks) {
@@ -122,6 +124,8 @@ export default function BookDetail({ book, bookid }) {
     if (router.isFallback) {
         return <div>Loading...</div>
     }
+
+    console.log(user);
 
     return (
         <Layout>
@@ -245,7 +249,7 @@ export default function BookDetail({ book, bookid }) {
                                 </div>
                             </div>
                             {!addedByUser && userID &&
-                                <AddReview userId={userID} overAllReview={overAllReview} isbn={book.isbn} />
+                                <AddReview userId={userID} user={user} overAllReview={overAllReview} isbn={book.isbn} />
                             }
                         </div>
                     </div>
