@@ -16,7 +16,7 @@ class StarRating extends Component {
     const stars = ev.target.parentElement.getElementsByClassName('review-star');
     const hoverValue = ev.target.dataset.value;
     Array.from(stars).forEach(star => {
-      star.style.color = hoverValue >= star.dataset.value ? 'yellow' : 'gray';
+      star.style.color = hoverValue >= star.dataset.value ? '#ffa700' : 'gray';
     });
   };
 
@@ -24,14 +24,15 @@ class StarRating extends Component {
     const stars = this.refs.rating.getElementsByClassName('review-star');
     Array.from(stars).forEach(star => {
       star.style.color =
-        this.state.currentRating >= star.dataset.value ? 'yellow' : 'gray';
+        this.state.currentRating >= star.dataset.value ? '#ffa700' : 'gray';
     });
   };
 
   starClickHandler = ev => {
-    let rating = ev.target.dataset.value;
-    this.setState({ currentRating: rating }); // set state so the rating stays highlighted
-    if(this.props.onClick){
+    if (this.props.onClick) {
+      let rating = ev.target.dataset.value;
+      this.setState({ currentRating: rating }); // set state so the rating stays highlighted
+
       this.props.onClick(rating); // emit the event up to the parent
     }
   };
@@ -48,8 +49,8 @@ class StarRating extends Component {
           return (
             <span
               className="review-star"
-              key={n+1}
-              data-value={n+1}
+              key={n + 1}
+              data-value={n + 1}
               onMouseOver={this.hoverHandler}
               onClick={this.starClickHandler}
             >

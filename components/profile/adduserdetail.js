@@ -32,11 +32,11 @@ const AddUserDetail = ({ user, mode, onToastEvent }) => {
         event.preventDefault();
 
         try {
-            let key = profile.image;
+            let key = profile && profile.image ? profile.image : '';
             if (image && localImage) {
                 const fileName = `${image.name}_${uuid()}`;
                 key = fileName;
-                await Storage.remove(profile.image);
+                if(profile && profile.image) await Storage.remove(profile.image);
                 await Storage.put(fileName, image, {
                     contentType: image.type,
                 });

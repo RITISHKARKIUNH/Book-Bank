@@ -64,13 +64,16 @@ function AddReview({ userId, overAllReview, isbn }) {
     async function updateBookRating(rating) {
         try {
             let updatedReviews = overAllReview;
+            const newTotalReviews = updatedReviews.totalRating + 1;
+            const totalReviewPoints = (parseFloat(updatedReviews.totalRatingScore) * updatedReviews.totalRating) + parseFloat(rating.score);
+            const totalReviewScore = parseFloat(totalReviewPoints / newTotalReviews).toFixed(1);
             if (updatedReviews.createdAt) delete updatedReviews.createdAt;
             if (updatedReviews.updatedAt) delete updatedReviews.updatedAt;
 
             if (updatedReviews) {
-                updatedReviews.totalRating += 1;
-                updatedReviews.totalRatingScore = ((parseFloat(updatedReviews.totalRatingScore) * updatedReviews.totalRating) + rating.score) / updatedReviews.totalRating;
-                updatedReviews.totalRatingScore = parseFloat(updatedReviews.totalRatingScore).toFixed(1);
+                updatedReviews.totalRating = newTotalReviews;
+                updatedReviews.totalRatingScore = totalReviewScore;
+
                 const response = await API.graphql({
                     query: updateReview,
                     variables: { input: updatedReviews }

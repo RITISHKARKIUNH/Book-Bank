@@ -168,4 +168,39 @@ header{
 .review-star {
     color: gray;
     font-size: 20px;
+    cursor: pointer;
+}
+
+.reviews-header{
+    border-bottom: 1px solid rgba(163, 107, 107, 0.2);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 5px;
+    margin-bottom: 25px;
+}
+
+.review{
+    color:#303030;
+    .user{
+        display: flex;
+        font-weight: 700;
+        align-items: center;
+        margin-bottom : 5px;
+        svg{
+            font-size: 34px;
+            margin-right: 5px;
+        }
+    }
+    .title{
+        display: flex;
+        font-weight: 700;
+        align-items: center;
+        h5{
+            margin: 0 0 0 10px;
+        }
+    }
+    .description{
+        margin-top: 10px;
+    }
 }

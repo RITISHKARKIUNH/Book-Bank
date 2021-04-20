@@ -1,14 +1,16 @@
 import { useState, useEffect } from 'react';
-import { API, Storage, Auth } from 'aws-amplify'
-import { useRouter } from 'next/router'
-import ReactMarkdown from 'react-markdown'
-import '../../configureAmplify'
-import { listBooks, getBook } from '../../graphql/queries'
-import { Layout } from '../../components/common';
+import { API, Auth } from 'aws-amplify'
+import { useRouter } from 'next/router';
+import ReactMarkdown from 'react-markdown';
+import '../../configureAmplify';
+import { listBooks, getBook } from '../../graphql/queries';
+import { Layout, StarRating } from '../../components/common';
 import { getUser, booksByUsername } from "../../graphql/queries";
 import Picture from '../../components/common/picture';
 import AddReview from '../../components/review/addReview';
+import DisplayReviews from '../../components/review/displayReviews';
 import { overallReviewsForBook } from '../../graphql/queries';
+import { formatDate } from '../../lib/utils';
 
 export default function BookDetail({ book, bookid }) {
     if (!book) {
@@ -45,7 +47,7 @@ export default function BookDetail({ book, bookid }) {
 
         const { items } = bookData.data.overallReviewsForBook;
         console.log(items);
-        if(items && items.length > 0){
+        if (items && items.length > 0) {
             setOverAllReview(items[0]);
         }
     }
@@ -134,16 +136,10 @@ export default function BookDetail({ book, bookid }) {
                                     {/* <h6 className="text-sm">{book.pageCount} Pages</h6> */}
                                     {/* <!-- Rating --> */}
                                     <div className="row align-items-center">
-                                        <div className="col-sm-3">
-                                            <span className="static-rating static-rating-sm d-block">
-                                                <i className="star far fa-star"></i>
-                                                <i className="star far fa-star"></i>
-                                                <i className="star far fa-star"></i>
-                                                <i className="star far fa-star"></i>
-                                                <i className="star far fa-star"></i>
-                                            </span>
+                                        <div className="col-sm-12">
+                                            {`Added : ${formatDate(book.createdAt)}`}
                                         </div>
-                                        <div className="col-sm-9 text-sm-right">
+                                        <div className="col-sm-12">
                                             <ul className="list-inline mb-0">
                                                 <li className="list-inline-item">
                                                     <span className="badge badge-pill badge-soft-info">ISBN: {book.isbn}</span>
@@ -167,6 +163,12 @@ export default function BookDetail({ book, bookid }) {
                                             <p className="text-sm mb-0">{book.author}</p>
                                         </div>
                                     }
+                                </div>
+                            </div>
+
+                            <div className="card">
+                                <div className="card-body">
+                                    <DisplayReviews isbn={book.isbn} />
                                 </div>
                             </div>
                         </div>
@@ -199,16 +201,19 @@ export default function BookDetail({ book, bookid }) {
                                             <div className="col-sm-12 mb-2">
                                                 <span className="h6"> Price : ${book.price}</span>
                                             </div>
-                                            <div className="col-sm-12 d-flex h6">
-                                                <span className="static-rating static-rating-sm d-block mr-2">
-                                                    <i className="star far fa-star"></i>
-                                                    <i className="star far fa-star"></i>
-                                                    <i className="star far fa-star"></i>
-                                                    <i className="star far fa-star"></i>
-                                                    <i className="star far fa-star"></i>
-                                                </span>
-                                                0 Rating
-                                            </div>
+                                            {
+                                                overAllReview && <div style={{ flexWrap: "wrap" }} className="col-sm-12 d-flex align-items-center h6">
+                                                    {
+                                                        <StarRating
+                                                            numberOfStars="5"
+                                                            currentRating={overAllReview.totalRatingScore}
+                                                        />
+                                                    }
+                                                    <span className="ml-1">{overAllReview.totalRatingScore}/5.0</span>
+                                                    <div style={{width:"100%"}} className="ml-1">{`${overAllReview.totalRating} total ${overAllReview.totalRating > 1 ? " Ratings" : " Rating"}`}</div>
+                                                </div>
+                                            }
+
                                             {
                                                 !addedByUser &&
                                                 <div className="col-sm-12 mt-5">
