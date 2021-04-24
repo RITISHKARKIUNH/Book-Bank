@@ -12,8 +12,19 @@ import DisplayReviews from '../../components/review/displayReviews';
 import { overallReviewsForBook } from '../../graphql/queries';
 import { formatDate } from '../../lib/utils';
 
-export default function BookDetail({ book, bookid }) {
-    if (!book) {
+function BookDetail({ book, bookid, bookLoading }) {
+    console.log(book, bookid, bookLoading);
+    if (bookLoading) {
+        return (
+            <Layout>
+                <section className="slice bg-section-secondary mt-6 mb-e text-center">
+                    <h1>...Loading</h1>
+                </section>
+            </Layout>
+        )
+    }
+
+    if (!book && !bookLoading) {
         return (
             <Layout>
                 <section className="slice bg-section-secondary mt-6 mb-e text-center">
@@ -121,6 +132,7 @@ export default function BookDetail({ book, bookid }) {
     }
 
     const router = useRouter();
+
     if (router.isFallback) {
         return <div>Loading...</div>
     }
@@ -214,7 +226,7 @@ export default function BookDetail({ book, bookid }) {
                                                         />
                                                     }
                                                     <span className="ml-1">{overAllReview.totalRatingScore}/5.0</span>
-                                                    <div style={{width:"100%"}} className="ml-1">{`${overAllReview.totalRating} total ${overAllReview.totalRating > 1 ? " Ratings" : " Rating"}`}</div>
+                                                    <div style={{ width: "100%" }} className="ml-1">{`${overAllReview.totalRating} total ${overAllReview.totalRating > 1 ? " Ratings" : " Rating"}`}</div>
                                                 </div>
                                             }
 
@@ -259,28 +271,30 @@ export default function BookDetail({ book, bookid }) {
     )
 }
 
-export async function getStaticPaths() {
-    const bookData = await API.graphql({
-        query: listBooks
-    })
-    const paths = bookData.data.listBooks.items.map(book => ({ params: { id: book.id } }))
-    return {
-        paths,
-        fallback: true
-    }
-}
+// export async function getStaticPaths() {
+//     const bookData = await API.graphql({
+//         query: listBooks
+//     })
+//     const paths = bookData.data.listBooks.items.map(book => ({ params: { id: book.id } }))
+//     return {
+//         paths,
+//         fallback: true
+//     }
+// }
 
-export async function getStaticProps({ params }) {
-    const { id } = params;
+BookDetail.getInitialProps = async ({ query }) => {
+    const { id } = query;
 
     const bookData = await API.graphql({
         query: getBook, variables: { id }
     });
+    console.log(id, bookData);
 
     return {
-        props: {
-            book: bookData.data.getBook,
-            bookid: id
-        }
+        book: bookData.data.getBook,
+        bookid: id,
+        bookLoading: bookData ? false : true
     }
 }
+
+export default BookDetail;

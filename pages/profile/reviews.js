@@ -90,7 +90,7 @@ async function updateBookRating(oldRating, newRating) {
             variables: { input: overAllReview }
         });
         if (response && response.data) {
-            Toaster('Review sucessfully added');
+            Toaster('Review sucessfully edited');
             // window.location.reload();
         }
         return response;
@@ -196,7 +196,7 @@ function EditReviewView({ review, onReviewEdited }) {
                         image={image}
                     />
 
-                    {!image && review.picture && <div className="mb-3"><Picture path={review.picture} alt={review.title} className="rounded img-thumbnail" /></div>}
+                    {!image && review.picture && <div className="mb-3"><Picture path={review.picture} alt={review.title} className="rounded img-thumbnail" style={{width:"50%"}}/></div>}
 
                     <button type="submit" className="btn btn-sm btn-primary btn-icon rounded-pill">edit review</button>
                 </form>

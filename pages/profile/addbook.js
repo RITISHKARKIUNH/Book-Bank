@@ -155,7 +155,38 @@ function AddBook() {
                                     </div>
                                 </div>
 
+
                                 <div className="form-group">
+                                    <label className="form-control-label">Book ISBN</label>
+                                    <div className="input-group">
+                                        <input placeholder="Isbn" className="form-control" {...register("isbn", { required: "Isbn is required" })} />
+                                        {errors.isbn && <span className="text-danger">{errors.isbn.message}</span>}
+                                    </div>
+                                </div>
+
+                                <div className="form-group">
+                                    <label className="form-control-label">Book Price</label>
+                                    <div className="input-group">
+                                        <input placeholder="Book Price" className="form-control" {...register("price", { required: "Book Price is required" })} />
+                                        {errors.price && <span className="text-danger">{errors.price.message}</span>}
+                                    </div>
+                                </div>
+
+                                <div className="form-group">
+                                    <label className="form-control-label">Book Publication</label>
+                                    <div className="input-group">
+                                        <input placeholder="Book Publication" className="form-control" {...register("publication", { required: "Book publication required" })} />
+                                        {errors.publication && <span className="text-danger">{errors.publication.message}</span>}
+                                    </div>
+                                </div>
+
+                                {/* {
+                                    image && (
+                                        <img src={URL.createObjectURL(image)} className="my-4" />
+                                    )
+                                } */}
+
+<div className="form-group">
                                     <label className="form-control-label">Book Condition</label>
                                     <div className="input-group">
                                         <Controller
@@ -194,36 +225,6 @@ function AddBook() {
                                         {errors.category && <span className="text-danger">This field is required</span>}
                                     </div>
                                 </div>
-
-                                <div className="form-group">
-                                    <label className="form-control-label">Book ISBN</label>
-                                    <div className="input-group">
-                                        <input placeholder="Isbn" className="form-control" {...register("isbn", { required: "Isbn is required" })} />
-                                        {errors.isbn && <span className="text-danger">{errors.isbn.message}</span>}
-                                    </div>
-                                </div>
-
-                                <div className="form-group">
-                                    <label className="form-control-label">Book Price</label>
-                                    <div className="input-group">
-                                        <input placeholder="Book Price" className="form-control" {...register("price", { required: "Book Price is required" })} />
-                                        {errors.price && <span className="text-danger">{errors.price.message}</span>}
-                                    </div>
-                                </div>
-
-                                <div className="form-group">
-                                    <label className="form-control-label">Book Publication</label>
-                                    <div className="input-group">
-                                        <input placeholder="Book Publication" className="form-control" {...register("publication", { required: "Book publication required" })} />
-                                        {errors.publication && <span className="text-danger">{errors.publication.message}</span>}
-                                    </div>
-                                </div>
-
-                                {/* {
-                                    image && (
-                                        <img src={URL.createObjectURL(image)} className="my-4" />
-                                    )
-                                } */}
 
                                 <div className="form-group">
                                     <label className="form-control-label">Book Description</label>

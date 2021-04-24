@@ -22,7 +22,7 @@ function Review({ review }) {
                 <p>{review.description}</p>
             </div>
             {
-                review.picture && <div className="picture">
+                review.picture && <div className="picture" style={{ width: "50%" }}>
                     <Picture path={review.picture} alt="review image" className="rounded img-thumbnail mb-3" />
                 </div>
             }
