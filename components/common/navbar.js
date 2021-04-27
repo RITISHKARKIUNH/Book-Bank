@@ -26,8 +26,8 @@ function NavBar({ pageName }) {
             let userData = null;
             let user = await Auth.currentAuthenticatedUser();
 
-            if (user && user.attributes.sub) {
-                id = user.attributes.sub;
+            if (user && user.username) {
+                id = user.username;
                 userData = await API.graphql({
                     query: getUser, variables: { id }
                 });

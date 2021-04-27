@@ -81,6 +81,7 @@ function AddBook() {
         book.price = price;
         book.publication = publication;
         book.title = title;
+        book.availability = 'available'
         if (description.length > 0) {
             book.description = description;
         }
@@ -106,12 +107,14 @@ function AddBook() {
 
             await API.graphql({
                 query: createReview,
-                variables: { input: {
-                    id : uuid(),
-                    isbn: isbn,
-                    totalRating : 0,
-                    totalRatingScore : '0'
-                }}
+                variables: {
+                    input: {
+                        id: uuid(),
+                        isbn: isbn,
+                        totalRating: 0,
+                        totalRatingScore: '0'
+                    }
+                }
             });
 
             Toaster('Book sucessfully uploaded');
@@ -186,7 +189,7 @@ function AddBook() {
                                     )
                                 } */}
 
-<div className="form-group">
+                                <div className="form-group">
                                     <label className="form-control-label">Book Condition</label>
                                     <div className="input-group">
                                         <Controller

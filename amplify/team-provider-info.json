@@ -1,20 +1,26 @@
 {
-  "dev": {
-    "awscloudformation": {
-      "AuthRoleName": "amplify-bookbank-dev-01748-authRole",
-      "UnauthRoleArn": "arn:aws:iam::468993462347:role/amplify-bookbank-dev-01748-unauthRole",
-      "AuthRoleArn": "arn:aws:iam::468993462347:role/amplify-bookbank-dev-01748-authRole",
-      "Region": "us-east-1",
-      "DeploymentBucketName": "amplify-bookbank-dev-01748-deployment",
-      "UnauthRoleName": "amplify-bookbank-dev-01748-unauthRole",
-      "StackName": "amplify-bookbank-dev-01748",
-      "StackId": "arn:aws:cloudformation:us-east-1:468993462347:stack/amplify-bookbank-dev-01748/e7082580-87a0-11eb-b953-0e1d2f412171",
-      "AmplifyAppId": "d3kc58cwufyuiv"
-    },
-    "categories": {
-      "auth": {
-        "bookbankb88b7175": {}
-      }
+    "dev": {
+        "awscloudformation": {
+            "AuthRoleName": "amplify-bookbank-dev-183326-authRole",
+            "UnauthRoleArn": "arn:aws:iam::468993462347:role/amplify-bookbank-dev-183326-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::468993462347:role/amplify-bookbank-dev-183326-authRole",
+            "Region": "us-east-1",
+            "DeploymentBucketName": "amplify-bookbank-dev-183326-deployment",
+            "UnauthRoleName": "amplify-bookbank-dev-183326-unauthRole",
+            "StackName": "amplify-bookbank-dev-183326",
+            "StackId": "arn:aws:cloudformation:us-east-1:468993462347:stack/amplify-bookbank-dev-183326/6bdb3ce0-a6df-11eb-8e41-0a903255f0c5",
+            "AmplifyAppId": "d1rdtyzw4ed62a"
+        },
+        "categories": {
+            "auth": {
+                "bookbank374fb1de": {}
+            },
+            "hosting": {
+                "amplifyhosting": {
+                    "appId": "d1rdtyzw4ed62a",
+                    "type": "manual"
+                }
+            }
+        }
     }
-  }
 }

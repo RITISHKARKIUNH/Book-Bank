@@ -5,7 +5,7 @@ export default function Toaster(message, isError) {
     if (isError) {
         toast.error(<ErrorToast message={message} />, {
             position: "top-right",
-            autoClose: false,
+            autoClose: 3000,
             hideProgressBar: false,
             closeOnClick: true,
             pauseOnHover: true,
@@ -15,7 +15,7 @@ export default function Toaster(message, isError) {
     } else {
         toast.info(<SucessToast message={message} />, {
             position: "top-right",
-            autoClose: false,
+            autoClose: 3000,
             hideProgressBar: false,
             closeOnClick: true,
             pauseOnHover: true,

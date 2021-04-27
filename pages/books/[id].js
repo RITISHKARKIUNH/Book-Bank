@@ -46,7 +46,6 @@ function BookDetail({ book, bookid, bookLoading }) {
         if (items && items.length > 0 && items.some(item => item.id === bookid) && userID) {
             setIsSaved(true);
         }
-
         checkUser();
         getBookRatings();
     }, []);
@@ -70,10 +69,10 @@ function BookDetail({ book, bookid, bookLoading }) {
             let userData = null;
             let listedBooks = null;
             let user = await Auth.currentAuthenticatedUser();
-            setUserId(user.attributes.sub);
+            setUserId(user.username);
 
-            if (user && user.attributes.sub) {
-                id = user.attributes.sub;
+            if (user && user.username) {
+                id = user.username;
                 userData = await API.graphql({
                     query: getUser, variables: { id }
                 });
@@ -112,7 +111,7 @@ function BookDetail({ book, bookid, bookLoading }) {
         if (!items) {
             items = [];
         }
-        console.log(userID);
+
         if (userID) {
             const modifiedBook = { ...book, addedBy: userID };
             items.push(modifiedBook);
@@ -137,7 +136,7 @@ function BookDetail({ book, bookid, bookLoading }) {
         return <div>Loading...</div>
     }
 
-    console.log(user);
+    console.log(userID, addedByUser);
 
     return (
         <Layout>
@@ -252,7 +251,7 @@ function BookDetail({ book, bookid, bookLoading }) {
                                             }
                                             {
                                                 addedByUser && userID &&
-                                                <div class="alert alert-info mt-5" role="alert">
+                                                <div className="alert alert-info mt-5" role="alert">
                                                     Added by you
                                                 </div>
                                             }

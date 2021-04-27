@@ -1,8 +1,8 @@
 {
-    "identityPoolName": "bookbankb88b7175_identitypool_b88b7175",
+    "identityPoolName": "bookbank374fb1de_identitypool_374fb1de",
     "allowUnauthenticatedIdentities": true,
-    "resourceNameTruncated": "bookbab88b7175",
-    "userPoolName": "bookbankb88b7175_userpool_b88b7175",
+    "resourceNameTruncated": "bookba374fb1de",
+    "userPoolName": "bookbank374fb1de_userpool_374fb1de",
     "autoVerifiedAttributes": [
         "email"
     ],
@@ -28,10 +28,10 @@
     "userpoolClientReadAttributes": [
         "email"
     ],
-    "userpoolClientLambdaRole": "bookbab88b7175_userpoolclient_lambda_role",
+    "userpoolClientLambdaRole": "bookba374fb1de_userpoolclient_lambda_role",
     "userpoolClientSetAttributes": false,
-    "sharedId": "b88b7175",
-    "resourceName": "bookbankb88b7175",
+    "sharedId": "374fb1de",
+    "resourceName": "bookbank374fb1de",
     "authSelections": "identityPoolAndUserPool",
     "authRoleArn": {
         "Fn::GetAtt": [
@@ -50,21 +50,15 @@
     "usernameAttributes": [
         "email"
     ],
-    "triggers": "{}",
-    "userPoolGroupList": [],
-    "serviceName": "Cognito",
-    "usernameCaseSensitive": false,
-    "parentStack": {
-        "Ref": "AWS::StackId"
-    },
-    "permissions": [],
-    "dependsOn": [],
-    "hostedUIDomainName": "bookbankdb690661-db690661",
+    "hostedUIDomainName": "bookbank374fb1de-374fb1de",
     "authProvidersUserPool": [
         "Facebook",
         "Google"
     ],
     "hostedUIProviderMeta": "[{\"ProviderName\":\"Facebook\",\"authorize_scopes\":\"email,public_profile\",\"AttributeMapping\":{\"email\":\"email\",\"username\":\"id\"}},{\"ProviderName\":\"Google\",\"authorize_scopes\":\"openid email profile\",\"AttributeMapping\":{\"email\":\"email\",\"username\":\"sub\"}}]",
     "oAuthMetadata": "{\"AllowedOAuthFlows\":[\"code\"],\"AllowedOAuthScopes\":[\"phone\",\"email\",\"openid\",\"profile\",\"aws.cognito.signin.user.admin\"],\"CallbackURLs\":[\"http://localhost:3000/\"],\"LogoutURLs\":[\"http://localhost:3000/\"]}",
-    "authProviders": []
+    "userPoolGroupList": [],
+    "serviceName": "Cognito",
+    "usernameCaseSensitive": false,
+    "dependsOn": []
 }

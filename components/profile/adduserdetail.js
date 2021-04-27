@@ -47,7 +47,7 @@ const AddUserDetail = ({ user, mode, onToastEvent }) => {
                 query: mode === 'add' ? createUser : updateUser,
                 variables: {
                     input: {
-                        id: user.attributes.sub,
+                        id: user.username,
                         image: key,
                         firstName: firstName,
                         lastName: secondName,

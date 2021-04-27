@@ -13,6 +13,7 @@ function AddReview({ userId, overAllReview, isbn, user }) {
         userName=`${firstName} ${lastName}`;
         profilePicture = image;
     }
+    console.log(userId, !overAllReview, !isbn );
     if (!userId || !overAllReview || !isbn) return null;
     const [rating, setRating] = useState(0);
     const [uploadingReview, setUploadingReview] = useState(false);

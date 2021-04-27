@@ -12,7 +12,7 @@ function FavoriteBooks({ user }) {
         console.log(items);
         if (items && items.length > 0) {
             items.forEach(book => {
-                if (book.addedBy === user.attributes.sub) {
+                if (book.addedBy === user.username) {
                     favList.push(book);
                 }
             });

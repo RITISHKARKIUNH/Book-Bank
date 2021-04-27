@@ -13,13 +13,17 @@ export default function Home() {
   }, []);
 
   async function fetchBooks() {
-    const bookData = await API.graphql({
-      query: listBooks
-    });
+    try {
+      const bookData = await API.graphql({
+        query: listBooks
+      });
 
-    const { items } = bookData.data.listBooks;
-    setBooks(items);
-    setLoadingBooks(false);
+      const { items } = bookData.data.listBooks;
+      setBooks(items);
+      setLoadingBooks(false);
+    } catch (e) {
+      console.log(e);
+    }
   }
 
   return (

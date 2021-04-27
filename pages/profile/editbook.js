@@ -9,7 +9,7 @@ import Select from 'react-select';
 
 import { updateBook } from '../../graphql/mutations';
 import { getBook } from '../../graphql/queries';
-import { Input } from '../../components/common';
+import { Input, Toaster } from '../../components/common';
 import { makeBookStatusOptions, makeCategoryOptions, createOption } from '../../lib/commondata';
 import { selectStyle } from './addbook';
 import WithProfileLayout from '../../hoc/withprofilelayout';
@@ -78,8 +78,10 @@ function EditBook({ bookData }) {
                 variables: { input: bookUpdated },
                 authMode: "AMAZON_COGNITO_USER_POOLS"
             });
+            Toaster('Book sucessfully updated');
             router.push('/profile/listedbooks');
             console.log('book successfully updated!');
+
         } catch (e) {
             console.error(e);
         }

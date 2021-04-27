@@ -8,6 +8,7 @@ import ForgotPassword from '../components/profile/forgotpassword';
 import ForgotPasswordSubmit from '../components/profile/forgotpasswordsubmit';
 import ConfirmSignUp from '../components/profile/confirmsignup';
 import { useRouter } from 'next/router';
+import { Toaster } from '../components/common';
 
 function Login() {
     const router = useRouter();
@@ -42,7 +43,10 @@ function Login() {
         try {
             await Auth.signUp({ username: email, password, attributes: { email } });
             setUiState('confirmSignUp');
-        } catch (err) { console.log({ err }) }
+        } catch (err) { 
+            console.log(err);
+            Toaster(err.message, true);
+        }
     }
 
     async function confirmSignUp() {
@@ -51,7 +55,10 @@ function Login() {
             await Auth.signIn(email, password);
             // setUiState('signedIn');
             router.push('/');
-        } catch (err) { console.log({ err }) }
+        } catch (err) { 
+            console.log({ err }) ;
+            Toaster(err.message, true);
+        }
     }
 
     async function signIn() {
@@ -59,14 +66,20 @@ function Login() {
             await Auth.signIn(email, password);
             // setUiState('signedIn');
             router.push('/');
-        } catch (err) { console.log({ err }) }
+        } catch (err) { 
+            console.log({ err });
+            Toaster(err.message, true);
+        }
     }
 
     async function forgotPassword() {
         try {
             await Auth.forgotPassword(email);
             setUiState('forgotPasswordSubmit');
-        } catch (err) { console.log({ err }) }
+        } catch (err) { 
+            console.log({ err });
+            Toaster(err.message, true);
+        }
     }
 
     async function forgotPasswordSubmit() {

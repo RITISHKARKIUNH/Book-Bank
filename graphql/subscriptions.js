@@ -160,28 +160,76 @@ export const onCreateUser = /* GraphQL */ `
       description
       phoneNumber
       image
+      favoriteBooks {
+        id
+        title
+        description
+        author
+        publication
+        isbn
+        category
+        condition
+        price
+        picture
+        username
+        availability
+        boughtBy
+        createdAt
+        updatedAt
+      }
+      addedBooks {
+        id
+        title
+        description
+        author
+        publication
+        isbn
+        category
+        condition
+        price
+        picture
+        username
+        availability
+        boughtBy
+        createdAt
+        updatedAt
+      }
+      soldBooks {
+        id
+        title
+        description
+        author
+        publication
+        isbn
+        category
+        condition
+        price
+        picture
+        username
+        availability
+        boughtBy
+        createdAt
+        updatedAt
+      }
+      boughtBooks {
+        id
+        title
+        description
+        author
+        publication
+        isbn
+        category
+        condition
+        price
+        picture
+        username
+        availability
+        boughtBy
+        createdAt
+        updatedAt
+      }
       createdAt
       updatedAt
-      favoriteBooks {
-        items {
-          id
-          title
-          description
-          author
-          publication
-          isbn
-          category
-          condition
-          price
-          picture
-          username
-          availability
-          boughtBy
-          createdAt
-          updatedAt
-        }
-        nextToken
-      }
     }
   }
 `;
@@ -194,28 +242,76 @@ export const onUpdateUser = /* GraphQL */ `
       description
       phoneNumber
       image
+      favoriteBooks {
+        id
+        title
+        description
+        author
+        publication
+        isbn
+        category
+        condition
+        price
+        picture
+        username
+        availability
+        boughtBy
+        createdAt
+        updatedAt
+      }
+      addedBooks {
+        id
+        title
+        description
+        author
+        publication
+        isbn
+        category
+        condition
+        price
+        picture
+        username
+        availability
+        boughtBy
+        createdAt
+        updatedAt
+      }
+      soldBooks {
+        id
+        title
+        description
+        author
+        publication
+        isbn
+        category
+        condition
+        price
+        picture
+        username
+        availability
+        boughtBy
+        createdAt
+        updatedAt
+      }
+      boughtBooks {
+        id
+        title
+        description
+        author
+        publication
+        isbn
+        category
+        condition
+        price
+        picture
+        username
+        availability
+        boughtBy
+        createdAt
+        updatedAt
+      }
       createdAt
       updatedAt
-      favoriteBooks {
-        items {
-          id
-          title
-          description
-          author
-          publication
-          isbn
-          category
-          condition
-          price
-          picture
-          username
-          availability
-          boughtBy
-          createdAt
-          updatedAt
-        }
-        nextToken
-      }
     }
   }
 `;
@@ -228,28 +324,76 @@ export const onDeleteUser = /* GraphQL */ `
       description
       phoneNumber
       image
+      favoriteBooks {
+        id
+        title
+        description
+        author
+        publication
+        isbn
+        category
+        condition
+        price
+        picture
+        username
+        availability
+        boughtBy
+        createdAt
+        updatedAt
+      }
+      addedBooks {
+        id
+        title
+        description
+        author
+        publication
+        isbn
+        category
+        condition
+        price
+        picture
+        username
+        availability
+        boughtBy
+        createdAt
+        updatedAt
+      }
+      soldBooks {
+        id
+        title
+        description
+        author
+        publication
+        isbn
+        category
+        condition
+        price
+        picture
+        username
+        availability
+        boughtBy
+        createdAt
+        updatedAt
+      }
+      boughtBooks {
+        id
+        title
+        description
+        author
+        publication
+        isbn
+        category
+        condition
+        price
+        picture
+        username
+        availability
+        boughtBy
+        createdAt
+        updatedAt
+      }
       createdAt
       updatedAt
-      favoriteBooks {
-        items {
-          id
-          title
-          description
-          author
-          publication
-          isbn
-          category
-          condition
-          price
-          picture
-          username
-          availability
-          boughtBy
-          createdAt
-          updatedAt
-        }
-        nextToken
-      }
     }
   }
 `;

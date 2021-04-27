@@ -60,7 +60,7 @@ export const WithProfileLayout = (WrappedComponent) => {
                     return;
                 };
                 console.log(user);
-                const id = user.attributes.sub;
+                const id = user.username;
                 const userData = await API.graphql({
                     query: getUser, variables: { id }
                 });
