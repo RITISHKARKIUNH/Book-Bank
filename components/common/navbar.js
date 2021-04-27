@@ -15,10 +15,25 @@ function NavBar({ pageName }) {
     const [dropdownOpen, setDropDownOpen] = useState(false);
     const [user, setUser] = useState(null);
     const router = useRouter();
+    const [cartCount, setCartCount] = useState(0);
+
+    const cartListener = () => {
+        let items = JSON.parse(window.localStorage.getItem('cart'));
+        console.log(items);
+        if (items) {
+            setCartCount(items.length);
+        }
+    }
 
     useEffect(() => {
         checkUser();
-    }, [])
+        cartListener();
+        
+        window.addEventListener("storage", cartListener);
+        return () => window.removeEventListener("storage", cartListener);
+    }, []);
+
+
 
     async function checkUser() {
         try {
@@ -67,11 +82,24 @@ function NavBar({ pageName }) {
                         <SearchBar />
                     </div>
 
+                    {
+                        cartCount > 0 &&
+                        <Link href="/cart" as="/cart">
+                            <a role="button">
+                                <div className="navbar-cart">
+                                    <i className="fa fa-shopping-cart" />
+                                    <span>
+                                        {cartCount}
+                                    </span>
+                                </div>
+                            </a>
+                        </Link>
+                    }
 
                     {/* <!-- right most side user profile and dropdown --> */}
                     <UncontrolledDropdown className="nav-item dropdown dropdown-animate" inNavbar>
                         <DropdownToggle style={{ margin: 0 }} nav className="nav-link pr-lg-0">
-                            {!user && <img alt="Image placeholder" style={{ height: "50px", width: "50px", objectFit: "cover", filter:"brightness(0) invert(1)" }} src={"/static/background/avatar.png"} />}
+                            {!user && <img alt="Image placeholder" style={{ height: "50px", width: "50px", objectFit: "cover", filter: "brightness(0) invert(1)" }} src={"/static/background/avatar.png"} />}
                             {
                                 user &&
                                 <div style={{ marginTop: '0' }} className="media media-pill align-items-center">

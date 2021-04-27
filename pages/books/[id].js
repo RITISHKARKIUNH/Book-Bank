@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { API, Auth } from 'aws-amplify'
+import { API, Auth } from 'aws-amplify';
 import { useRouter } from 'next/router';
 import ReactMarkdown from 'react-markdown';
 import '../../configureAmplify';
@@ -38,14 +38,22 @@ function BookDetail({ book, bookid, bookLoading }) {
     const [user, setUser] = useState(null);
     const [addedByUser, setAddedByUser] = useState(false);
     const [isSaved, setIsSaved] = useState(false);
+    const [addedTocart, setAddedToCart] = useState(false);
     const [overAllReview, setOverAllReview] = useState(null);
 
     useEffect(() => {
         // check if saved in local storage before
-        let items = JSON.parse(window.localStorage.getItem('favoriteList'));
-        if (items && items.length > 0 && items.some(item => item.id === bookid) && userID) {
+        const favItems = JSON.parse(window.localStorage.getItem('favoriteList'));
+        if (favItems && favItems.length > 0 && favItems.some(item => item.id === bookid) && userID) {
             setIsSaved(true);
         }
+
+        // check if item is saved in cart before
+        const cartItems = JSON.parse(window.localStorage.getItem('cart'));
+        if (cartItems && cartItems.length > 0 && cartItems.some(item => item.id === bookid) && userID) {
+            setAddedToCart(true);
+        }
+
         checkUser();
         getBookRatings();
     }, []);
@@ -120,14 +128,34 @@ function BookDetail({ book, bookid, bookLoading }) {
         }
     }
 
-    const removeFromLocalStorage = (book) => {
-        let items = JSON.parse(window.localStorage.getItem('favoriteList'));
+    const addTocart = (book) => {
+        let items = JSON.parse(window.localStorage.getItem('cart'));
+        let isItemOnCart = false;
+        if (!items) {
+            items = [];
+        }
 
+        if (items && items.length > 0 && items.some(item => item.id === book.id)) {
+            isItemOnCart = true;
+        }
+
+        if (!isItemOnCart) {
+            items.push(book);
+        }
+
+        window.localStorage.setItem('cart', JSON.stringify(items));
+        window.dispatchEvent(new Event("storage"));
+        setAddedToCart(true);
+    }
+
+    const deleteFromCart = (book) => {
+        let items = JSON.parse(window.localStorage.getItem('cart'));
         if (items && items.length > 0) {
             items = items.filter(item => item.id !== book.id);
         }
-        window.localStorage.setItem('favoriteList', JSON.stringify(items));
-        setIsSaved(false);
+        window.localStorage.setItem('cart', JSON.stringify(items));
+        window.dispatchEvent(new Event("storage"));
+        setAddedToCart(false);
     }
 
     const router = useRouter();
@@ -233,6 +261,23 @@ function BookDetail({ book, bookid, bookLoading }) {
                                                 !addedByUser &&
                                                 <div className="col-sm-12 mt-5">
                                                     {/* <!-- Add to cart --> */}
+
+                                                    {
+                                                        !addedTocart &&
+                                                        <button onClick={() => addTocart(book)} type="button" className="btn btn-info btn-icon btn-block">
+                                                            <span className="btn-inner--icon"><i className="fas fa-shopping-cart"></i></span>
+                                                            <span className="btn-inner--text">Add to cart</span>
+                                                        </button>
+                                                    }
+
+                                                    {
+                                                        addedTocart &&
+                                                        <button onClick={() => deleteFromCart(book)} type="button" className="btn btn-info btn-icon btn-block">
+                                                            <span className="btn-inner--icon"><i className="fas fa-shopping-cart"></i></span>
+                                                            <span className="btn-inner--text">Delete from cart</span>
+                                                        </button>
+                                                    }
+
                                                     {
                                                         isSaved &&
                                                         <button onClick={() => removeFromLocalStorage(book)} type="button" className="btn btn-danger btn-icon btn-block">
@@ -240,6 +285,7 @@ function BookDetail({ book, bookid, bookLoading }) {
                                                             <span className="btn-inner--text">Delete from favorite</span>
                                                         </button>
                                                     }
+
                                                     {
                                                         !isSaved &&
                                                         <button onClick={() => savetoLocalStorage(book)} type="button" className="btn btn-success btn-icon btn-block">

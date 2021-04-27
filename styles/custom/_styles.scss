@@ -204,3 +204,23 @@ header{
         margin-top: 10px;
     }
 }
+
+// styling cart
+.navbar-cart{
+    position: relative;
+    color: white;
+    font-size: 30px;
+    span{
+        background-color: #e74c3c;
+        border-radius: 50%;
+        position: absolute;
+        top:0;
+        right:-12.5px;
+        font-size: 15px;
+        width:25px;
+        height: 25px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+}
