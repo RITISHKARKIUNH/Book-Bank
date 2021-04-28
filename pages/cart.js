@@ -1,63 +1,105 @@
 import { useState, useEffect } from 'react';
-import { API, Auth } from 'aws-amplify';
-import { Layout, Picture } from '../components/common';
-import { deleteFromCart } from '../lib/utils';
+import { Auth } from 'aws-amplify';
+import {
+    Elements,
+    CardElement,
+    useStripe,
+    useElements
+} from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
 
-function CartItem({ book }) {
+import { Layout } from '../components/common';
+import CartItem from '../components/cart/cartItem';
+const stripePromise = loadStripe('pk_test_51Ikb4cFIMPr1Z4G8kXTNrJwdkkckrY33bhjm6DMpjMa50Re9nAGZsP12JwGbJMlBdkxYkR7JKQENgmwNJGwSpvo500uzcJT6X5');
+
+const CheckoutForm = ({ cart, totalPrice, onPaymentSuccess }) => {
+    const stripe = useStripe();
+    const elements = useElements();
+
+    const handleSubmit = async event => {
+        event.preventDefault();
+
+        const { error, paymentMethod } = await stripe.createPaymentMethod({
+            type: "card",
+            card: elements.getElement(CardElement)
+        });
+
+        console.log(error);
+
+        if (!error) {
+            const { id } = paymentMethod;
+            const body = {
+                "id": id,
+                "amount": totalPrice * 100,
+                "lineItems": cart
+            };
+
+
+            console.log(body, totalPrice, typeof (totalPrice));
+            try {
+                const response = await fetch('api/cart', {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    method: "POST",
+                    body: JSON.stringify(body)
+                });
+                if (response.status === 200) {
+                    onPaymentSuccess(response);
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        }
+    };
+
     return (
-        <div className="row mb-4">
-            <div className="col-md-5 col-lg-3 col-xl-3">
-                <div className="view zoom overlay z-depth-1 rounded mb-3 mb-md-0">
-                    <Picture path={book.picture} alt={book.title} className="img-fluid w-100" />
-                </div>
-            </div>
-            <div className="col-md-7 col-lg-9 col-xl-9">
-                <div>
-                    <div className="d-flex justify-content-between">
-                        <div>
-                            <h4>{book.title}</h4>
-                            <p className="mb-1 text-muted ">Isbn : {book.isbn}</p>
-                            <p className="mb-1 text-muted ">Author : {book.author}</p>
-                            <p className="mb-1 text-muted ">Condition : {book.condition}</p>
-                            <p className="mb-1 text-muted ">Publication : {book.publication}</p>
-                            <p className="mb-1 text-muted ">Categories : {book.category.map((cat, index) => `${cat}${index === book.category.length - 1 ? '' : ', '}`)}</p>
-                        </div>
-                        <div>
-                            <h5>Quantity : 1 </h5>
-                        </div>
-                    </div>
-                    <div className="d-flex justify-content-between align-items-center">
-                        <div>
-                            <span
-                                type="button"
-                                className="card-link-secondary small text-uppercase text-danger text-warning mr-3"
-                                onClick={() => {
-                                    deleteFromCart(book);
-                                }}
-                            >
-                                <i className="fas fa-trash-alt mr-1"></i> Remove item
-                            </span>
-                            <span type="button" className="card-link-secondary small text-primary text-uppercase">
-                                <i className="fas fa-heart mr-1"></i> Add to Favorite
-                            </span>
-                        </div>
-                        <p className="mb-0"><span><strong>${book.price}</strong></span></p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    )
+        <form
+            onSubmit={handleSubmit}
+            style={{ width: "100%" }}
+        >
+            <h5 className="mb-3 text-uppercase">Card Details</h5>
+
+            <CardElement />
+            <button type="submit" className="btn btn-primary btn-block waves-effect waves-light mt-3" disabled={!stripe}>
+                Pay Now
+            </button>
+        </form>
+    );
+};
+
+function StripeWrapper({ cart, totalPrice, ononPaymentSuccess }) {
+    const [status, setStatus] = useState("ready");
+
+    if (status === "success") {
+        return <div>Purchase success!</div>;
+    }
+
+    return (
+        <Elements stripe={stripePromise}>
+            <CheckoutForm
+                cart={cart}
+                totalPrice={totalPrice}
+                onPaymentSuccess={(response) => {
+                    setStatus("success");
+                    ononPaymentSuccess(response);
+                }}
+            />
+        </Elements>
+    );
 }
+
 
 function Cart() {
     const [cartItems, setCartItems] = useState([]);
     const [user, setUser] = useState(null);
     const [totalPrice, setTotalPrice] = useState(0);
+    const [displayCheckout, setDisplayCheckout] = useState(false);
+    const [paymentResponse, setPaymentResponse] = useState(null);
 
     useEffect(() => {
         checkInitialData();
         cartListener();
-
         window.addEventListener("storage", cartListener);
         return () => window.removeEventListener("storage", cartListener);
     }, []);
@@ -79,6 +121,31 @@ function Cart() {
     const checkInitialData = async () => {
         const user = await Auth.currentAuthenticatedUser();
         setUser(user);
+    }
+
+    const onPaymentSuccess = (response) => {
+        setPaymentResponse(response);
+        localStorage.removeItem('cart');
+    }
+
+
+    if(paymentResponse){
+        return (
+            <Layout>
+                <div className="container mt-5">
+                    <div className="page-content">
+                        <div className="row">
+                            <div className="card col">
+                                <div className="card-body">
+                                    <h1> You have succesfully purchased folowing items</h1>
+                                    <a href="/" type="button" className="btn btn-primary btn-lg waves-effect waves-light">Continue Browsing</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </Layout>
+        )
     }
 
     if (!cartItems || cartItems.length === 0) {
@@ -127,10 +194,10 @@ function Cart() {
                                 {
                                     cartItems.map((item, index) => {
                                         return (
-                                            <>
-                                                <CartItem book={item} key={item.id} />
+                                            <div key={item.id}>
+                                                <CartItem book={item} />
                                                 {index !== cartItems.length - 1 && <hr className="mb-4" />}
-                                            </>
+                                            </div>
                                         )
                                     })
                                 }
@@ -152,19 +219,23 @@ function Cart() {
                                     alt="Mastercard" />
                             </div>
                         </div>
-                        
+
                         <div className="card mb-3">
                             <div className="card-body">
-                                <h5 className="mb-3 text-uppercase">Order Summary</h5>
-                                <ul className="list-group list-group-flush">
-                                    <li className="list-group-item d-flex justify-content-between align-items-center border-0 px-0 pb-0 mb-3">
-                                        Estimated Total
-                                        <span>${totalPrice} USD</span>
-                                    </li>
-                                </ul>
-
-                                <button type="button" className="btn btn-primary btn-block waves-effect waves-light">Proceed to checkout</button>
-                                <a href="/" type="button" className="btn btn-primary btn-block waves-effect waves-light">Continue Browsing</a>
+                                {!displayCheckout &&
+                                    <>
+                                        <h5 className="mb-3 text-uppercase">Order Summary</h5>
+                                        <ul className="list-group list-group-flush">
+                                            <li className="list-group-item d-flex justify-content-between align-items-center border-0 px-0 pb-0 mb-3">
+                                                Estimated Total
+                                                <span>${totalPrice} USD</span>
+                                            </li>
+                                        </ul>
+                                        <button onClick={() => setDisplayCheckout(true)} type="button" className="btn btn-primary btn-block waves-effect waves-light">Proceed to checkout</button>
+                                        <a href="/" type="button" className="btn btn-primary btn-block waves-effect waves-light">Continue Browsing</a>
+                                    </>
+                                }
+                                {displayCheckout && <StripeWrapper cart={cartItems} totalPrice={totalPrice} ononPaymentSuccess={res => onPaymentSuccess(res)} />}
                             </div>
                         </div>
                     </div>

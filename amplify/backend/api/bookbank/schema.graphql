@@ -3,7 +3,7 @@ type Book @model
 @key(name: "booksBoughtByUsername", fields: ["username", "boughtBy"], queryField: "booksBoughtByUsername")
 @auth(rules: [
   { allow: owner, ownerField: "username" },
-  { allow: public, operations: [read] }
+  { allow: public, operations: [read, update] }
 ]) {
   id: ID!
   title: String!
