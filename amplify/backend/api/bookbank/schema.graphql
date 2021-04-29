@@ -1,6 +1,8 @@
 type Book @model
 @key(name: "booksByUsername", fields: ["username"], queryField: "booksByUsername")
-@key(name: "booksBoughtByUsername", fields: ["username", "boughtBy"], queryField: "booksBoughtByUsername")
+@key(name: "availableBooks", fields: ["availability"], queryField: "availableBooks")
+@key(name: "booksBoughtByUsername", fields: ["boughtBy"], queryField: "booksBoughtByUsername")
+@key(name: "availableBooksByUsername", fields: ["username", "availability"], queryField: "availableBooksByUsername")
 @auth(rules: [
   { allow: owner, ownerField: "username" },
   { allow: public, operations: [read, update] }
@@ -61,4 +63,6 @@ type User @model
   addedBooks : [Book]
   soldBooks : [Book]
   boughtBooks : [Book]
+  email : String
+  interest: [String!]
 }

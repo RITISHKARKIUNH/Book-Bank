@@ -26,6 +26,7 @@ function AddBook() {
     const [image, setImage] = useState(null);
     const [categoryValues, setCategoryValues] = useState(null);
     const [description, setDescription] = useState('');
+    const [addingBook, setAddingBook] = useState(false);
     const hiddenFileInput = useRef(null);
     const router = useRouter();
     const { register, handleSubmit, watch, formState: { errors }, control } = useForm();
@@ -58,6 +59,7 @@ function AddBook() {
 
     const onSubmit = async data => {
         console.log(data);
+        setAddingBook(true);
         let { author, category, condition, isbn, price, publication, title } = data;
         const id = uuid();
         let extractedCategory = [];
@@ -118,9 +120,11 @@ function AddBook() {
             });
 
             Toaster('Book sucessfully uploaded');
+            setAddingBook(false);
             router.push(`/books/${id}`);
         } catch (e) {
             Toaster(e.message, true);
+            setAddingBook(false);
         }
     };
 
@@ -183,11 +187,6 @@ function AddBook() {
                                     </div>
                                 </div>
 
-                                {/* {
-                                    image && (
-                                        <img src={URL.createObjectURL(image)} className="my-4" />
-                                    )
-                                } */}
 
                                 <div className="form-group">
                                     <label className="form-control-label">Book Condition</label>
@@ -243,29 +242,13 @@ function AddBook() {
                                     onClick={e => { e.stopPropagation(); e.preventDefault() }}
                                 />
 
-                                {/* <button
-                                    className="btn btn-sm btn-primary btn-icon rounded-pill"
-                                    onClick={e => {
-                                        uploadImage();
-                                        e.stopPropagation();
-                                    }}
-                                >
-                                    Upload Book Image
-                                </button> */}
 
                                 <ImageUploader
                                     imageUploadHandler={handleChange}
                                     image={image}
                                 />
 
-                                {/* <button
-                                    type="button"
-                                    className="btn btn-sm btn-primary btn-icon rounded-pill"
-                                    onClick={createNewBook}
-                                >
-                                    Add Book
-                                </button> */}
-                                <button type="submit" className="btn btn-sm btn-primary btn-icon rounded-pill">Add Book</button>
+                                <button type="submit" disabled={addingBook} className="btn btn-sm btn-primary btn-icon rounded-pill">{addingBook ? "Adding" : "Add"} Book</button>
                             </form>
                         </div>
                     </div>

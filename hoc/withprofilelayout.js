@@ -5,7 +5,7 @@ import {
     DropdownToggle,
     DropdownMenu,
 } from 'reactstrap';
-import { API, Storage, Auth } from 'aws-amplify';
+import { API, Auth } from 'aws-amplify';
 import { useRouter } from 'next/router';
 import { PageNotFound } from '../components/common';
 import Link from 'next/link';

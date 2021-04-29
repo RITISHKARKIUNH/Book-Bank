@@ -22,6 +22,30 @@ function UserDetail({ user, onEditUser }) {
                     </div>
 
                     <div className="form-group">
+                        <label className="form-control-label">Contact Email</label>
+                        <div className="input-group">
+                            <h4 role="button"><i className="fa fa-envelope-open-text" /> {user.profile.email}</h4>
+                        </div>
+                    </div>
+
+                    {
+                        user.profile.interest && user.profile.interest.length > 0 && <div className="form-group">
+                            <label className="form-control-label">Interests</label>
+                            <div className="input-group">
+                                <div className="badges">
+                                    {
+                                        user.profile.interest.map((cat, index) => {
+                                            return (
+                                                <span key={index} className="badge badge-info rounded-pill ml-1">{cat}</span>
+                                            )
+                                        })
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                    <div className="form-group">
                         <label className="form-control-label">About yourself</label>
                         <div className="input-group">
                             <h4 role="button">{user.profile.description}</h4>

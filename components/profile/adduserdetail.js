@@ -1,16 +1,30 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Input } from '../common';
 import { createUser, updateUser } from '../../graphql/mutations';
-import { API, Storage } from 'aws-amplify';
+import { API, facebookSignInButton, Storage } from 'aws-amplify';
 import { v4 as uuid } from "uuid";
+import Select from 'react-select';
+
+import { Input } from '../common';
+import { makeCategoryOptions, createOption } from '../../lib/commondata';
+const selectStyle = {
+    control: (base, state) => ({
+        ...base,
+        border: state.isFocused ? '1px solid rgba(110, 0, 255, 0.5)' : '1px solid #e0e6ed',
+        boxShadow: state.isFocused ? 'inset 0 1px 1px rgb(31 45 61 / 8%), 0 0 20px rgb(110 0 255 / 10%)' : 'inset 0 1px 1px rgb(31 45 61 / 8%)',
+        height: "50px"
+    })
+};
 
 const AddUserDetail = ({ user, mode, onToastEvent }) => {
     const { profile } = user;
     const [firstName, setFirstName] = useState(mode === 'add' ? '' : profile ? profile.firstName : '');
     const [secondName, setSecondName] = useState(mode === 'add' ? '' : profile ? profile.lastName : '');
     const [phoneNumber, setPhoneNumber] = useState(mode === 'add' ? '' : profile ? profile.phoneNumber : '');
+    const [email, setEmail] = useState(mode === 'add' ? '' : profile ? profile.email : '');
     const [description, setDescription] = useState(mode === 'add' ? '' : profile ? profile.description : '');
     const [localImage, setLocalImage] = useState(null);
+    const [interests, setInterests] = useState(mode === 'add' ? null : profile?.interest ? profile.interest.map(cat => createOption(cat)) : null);
+    const [upadtingProfile, setUpdatingProfile] = useState(false);
     const hiddenFileInput = useRef(null);
     const [image, setImage] = useState(null);
 
@@ -30,13 +44,21 @@ const AddUserDetail = ({ user, mode, onToastEvent }) => {
 
     const submitHandler = async (event) => {
         event.preventDefault();
-
+        setUpdatingProfile(true);
         try {
             let key = profile && profile.image ? profile.image : '';
+            let exractedInterests = [];
+            if (interests && interests.length > 0) {
+                interests.forEach(c => {
+                    console.log(c);
+                    exractedInterests.push(c.label)
+                });
+            }
+
             if (image && localImage) {
                 const fileName = `${image.name}_${uuid()}`;
                 key = fileName;
-                if(profile && profile.image) await Storage.remove(profile.image);
+                if (profile && profile.image) await Storage.remove(profile.image);
                 await Storage.put(fileName, image, {
                     contentType: image.type,
                 });
@@ -53,11 +75,13 @@ const AddUserDetail = ({ user, mode, onToastEvent }) => {
                         lastName: secondName,
                         description: description,
                         phoneNumber: phoneNumber,
+                        email: email,
+                        interest: exractedInterests
                     },
                 },
                 authMode: "AMAZON_COGNITO_USER_POOLS"
             });
-            console.log(result);
+
 
             if (result && result.errors && result.errors.length > 0) {
                 onToastEvent({
@@ -70,12 +94,13 @@ const AddUserDetail = ({ user, mode, onToastEvent }) => {
                     mode: 'success'
                 });
             }
+            setUpdatingProfile(false);
         } catch (e) {
-            console.log(e);
             onToastEvent({
                 message: "Opps something went wrong",
                 mode: 'error'
             });
+            setUpdatingProfile(false);
         }
     }
 
@@ -146,6 +171,38 @@ const AddUserDetail = ({ user, mode, onToastEvent }) => {
                         </div>
 
                         <div className="form-group">
+                            <label className="form-control-label">Contact Email</label>
+                            <div className="input-group">
+                                <Input
+                                    type="text"
+                                    onChange={(event) => {
+                                        setEmail(event.target.value);
+                                    }}
+                                    placeholder="email"
+                                    value={email}
+                                    required
+                                />
+                            </div>
+                        </div>
+
+                        <div className="form-group">
+                            <label className="form-control-label">Your Interests</label>
+                            <div className="input-group">
+                                <Select
+                                    isMulti
+                                    className="bookbank-select"
+                                    onChange={setInterests}
+                                    options={makeCategoryOptions()}
+                                    placeholder="select interests"
+                                    required
+                                    defaultValue={interests}
+                                    styles={selectStyle}
+                                />
+                            </div>
+                        </div>
+
+
+                        <div className="form-group">
                             <label className="form-control-label">Description</label>
                             <div className="input-group">
                                 <textarea
@@ -160,15 +217,6 @@ const AddUserDetail = ({ user, mode, onToastEvent }) => {
                             </div>
                         </div>
 
-                        {/* {
-                            !image && user?.profile?.image &&
-                            <div className="form-group">
-                                <label className="form-control-label">Profile Image</label>
-                                <div className="input-group">
-                                    <Picture style={{ width: "300px", height: "300px", objectFit: "cover" }} path={user.profile.image} className="rounded d-block img-thumbnail" />
-                                </div>
-                            </div>
-                        } */}
 
                         {
                             image &&
@@ -178,17 +226,6 @@ const AddUserDetail = ({ user, mode, onToastEvent }) => {
                             </div>
                         }
 
-
-                        {/* {
-                            image && (
-                                <div className="form-group">
-                                    <label className="form-control-label">Profile Image</label>
-                                    <div className="input-group">
-                                        <img style={{ width: "300px", height: "300px", objectFit: "cover" }} src={URL.createObjectURL(image)} className="rounded d-block img-thumbnail" />
-                                    </div>
-                                </div>
-                            )
-                        } */}
 
                         <input
                             type="file"
@@ -210,8 +247,9 @@ const AddUserDetail = ({ user, mode, onToastEvent }) => {
                             type="button"
                             className="btn btn-lg btn-primary btn-icon rounded-pill"
                             onClick={submitHandler}
+                            disabled={upadtingProfile}
                         >
-                            {mode === 'add' ? 'Add' : 'Edit'} Profile
+                            {mode === 'add' ? upadtingProfile ? 'Adding' : 'Add' : upadtingProfile ? 'Editing' : 'Edit'} Profile
                     </button>
                     </div>
                 </div>

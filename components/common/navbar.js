@@ -22,6 +22,8 @@ function NavBar({ pageName }) {
         console.log(items);
         if (items) {
             setCartCount(items.length);
+        }else{
+            setCartCount(0);
         }
     }
 

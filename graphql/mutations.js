@@ -258,6 +258,8 @@ export const createUser = /* GraphQL */ `
         createdAt
         updatedAt
       }
+      email
+      interest
       createdAt
       updatedAt
     }
@@ -343,6 +345,8 @@ export const updateUser = /* GraphQL */ `
         createdAt
         updatedAt
       }
+      email
+      interest
       createdAt
       updatedAt
     }
@@ -428,6 +432,8 @@ export const deleteUser = /* GraphQL */ `
         createdAt
         updatedAt
       }
+      email
+      interest
       createdAt
       updatedAt
     }

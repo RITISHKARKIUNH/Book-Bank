@@ -1,11 +1,14 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import Picture from '../common/picture';
+import { formatDate } from '../../lib/utils';
 
-function Book({ book, smallView, ownerView, deleteBook }) {
+function Book({ book, smallView, ownerView, deleteBook, purchasedView, soldView}) {
     const router = useRouter();
     return (
         <div className={`${smallView ? 'col-lg-4 col-sm-6' : 'col-lg-3 col-sm-6'} book-card`}>
+            {purchasedView && <h5 className="small"> Purchased at : {formatDate(book.updatedAt)}</h5>}
+            {soldView && <h5 className="small"> Sold at : {formatDate(book.updatedAt)}</h5>}
             <div className="card card-product">
                 <Link href={`/books/${book.id}`} passHref>
                     <a style={{ textAlign: "center" }}>

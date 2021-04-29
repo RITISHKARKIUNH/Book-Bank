@@ -144,18 +144,90 @@ export const booksByUsername = /* GraphQL */ `
     }
   }
 `;
+export const availableBooks = /* GraphQL */ `
+  query AvailableBooks(
+    $availability: String
+    $sortDirection: ModelSortDirection
+    $filter: ModelBookFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    availableBooks(
+      availability: $availability
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        title
+        description
+        author
+        publication
+        isbn
+        category
+        condition
+        price
+        picture
+        username
+        availability
+        boughtBy
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
 export const booksBoughtByUsername = /* GraphQL */ `
   query BooksBoughtByUsername(
-    $username: String
-    $boughtBy: ModelStringKeyConditionInput
+    $boughtBy: String
     $sortDirection: ModelSortDirection
     $filter: ModelBookFilterInput
     $limit: Int
     $nextToken: String
   ) {
     booksBoughtByUsername(
-      username: $username
       boughtBy: $boughtBy
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        title
+        description
+        author
+        publication
+        isbn
+        category
+        condition
+        price
+        picture
+        username
+        availability
+        boughtBy
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const availableBooksByUsername = /* GraphQL */ `
+  query AvailableBooksByUsername(
+    $username: String
+    $availability: ModelStringKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelBookFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    availableBooksByUsername(
+      username: $username
+      availability: $availability
       sortDirection: $sortDirection
       filter: $filter
       limit: $limit
@@ -364,6 +436,8 @@ export const getUser = /* GraphQL */ `
         createdAt
         updatedAt
       }
+      email
+      interest
       createdAt
       updatedAt
     }
@@ -451,6 +525,8 @@ export const listUsers = /* GraphQL */ `
           createdAt
           updatedAt
         }
+        email
+        interest
         createdAt
         updatedAt
       }

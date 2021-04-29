@@ -8,17 +8,19 @@ import {
 } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 
+import { Toaster } from '../components/common';
 import { Layout } from '../components/common';
 import CartItem from '../components/cart/cartItem';
 const stripePromise = loadStripe('pk_test_51Ikb4cFIMPr1Z4G8kXTNrJwdkkckrY33bhjm6DMpjMa50Re9nAGZsP12JwGbJMlBdkxYkR7JKQENgmwNJGwSpvo500uzcJT6X5');
 
 const CheckoutForm = ({ cart, totalPrice, onPaymentSuccess }) => {
+    const [processingPayment, setProcessingPayment] = useState(false);
     const stripe = useStripe();
     const elements = useElements();
 
     const handleSubmit = async event => {
         event.preventDefault();
-
+        setProcessingPayment(true);
         const { error, paymentMethod } = await stripe.createPaymentMethod({
             type: "card",
             card: elements.getElement(CardElement)
@@ -46,9 +48,13 @@ const CheckoutForm = ({ cart, totalPrice, onPaymentSuccess }) => {
                 });
                 if (response.status === 200) {
                     onPaymentSuccess(response);
+                    Toaster('Payment Sucessfully Processed');
                 }
+                setProcessingPayment(false);
             } catch (error) {
                 console.log(error);
+                Toaster('Payment Not Processed', true);
+                setProcessingPayment(false);
             }
         }
     };
@@ -61,8 +67,8 @@ const CheckoutForm = ({ cart, totalPrice, onPaymentSuccess }) => {
             <h5 className="mb-3 text-uppercase">Card Details</h5>
 
             <CardElement />
-            <button type="submit" className="btn btn-primary btn-block waves-effect waves-light mt-3" disabled={!stripe}>
-                Pay Now
+            <button type="submit" disabled={processingPayment} className="btn btn-primary btn-block waves-effect waves-light mt-3" disabled={!stripe}>
+                {processingPayment ? 'Processing Payment' : 'Pay Now'}
             </button>
         </form>
     );
@@ -70,7 +76,6 @@ const CheckoutForm = ({ cart, totalPrice, onPaymentSuccess }) => {
 
 function StripeWrapper({ cart, totalPrice, ononPaymentSuccess }) {
     const [status, setStatus] = useState("ready");
-
     if (status === "success") {
         return <div>Purchase success!</div>;
     }
@@ -124,12 +129,14 @@ function Cart() {
     }
 
     const onPaymentSuccess = (response) => {
+        console.log(response);
         setPaymentResponse(response);
         localStorage.removeItem('cart');
+        window.dispatchEvent(new Event("storage"));
     }
 
 
-    if(paymentResponse){
+    if (paymentResponse) {
         return (
             <Layout>
                 <div className="container mt-5">
