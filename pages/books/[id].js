@@ -3,9 +3,10 @@ import { API, Auth } from 'aws-amplify';
 import { useRouter } from 'next/router';
 import ReactMarkdown from 'react-markdown';
 import '../../configureAmplify';
-import { listBooks, getBook } from '../../graphql/queries';
-import { Layout, StarRating } from '../../components/common';
+import { getBook } from '../../graphql/queries';
+import { Layout, StarRating, Toaster } from '../../components/common';
 import { getUser, booksByUsername } from "../../graphql/queries";
+import { updateUser } from '../../graphql/mutations';
 import Picture from '../../components/common/picture';
 import AddReview from '../../components/review/addReview';
 import DisplayReviews from '../../components/review/displayReviews';
@@ -39,6 +40,7 @@ function BookDetail({ book, bookid, bookLoading }) {
     const [addedByUser, setAddedByUser] = useState(false);
     const [isSaved, setIsSaved] = useState(false);
     const [addedTocart, setAddedToCart] = useState(false);
+    const [processingFavorite, setProcessingFavorite] = useState(false);
     const [overAllReview, setOverAllReview] = useState(null);
 
     useEffect(() => {
@@ -103,9 +105,11 @@ function BookDetail({ book, bookid, bookLoading }) {
                     }
                 });
 
-                if (items && items.length > 0 && items.some(item => item.id === bookid && item.addedBy === id)) {
+                if (user.profile && user.profile.favoriteBooks && user.profile.favoriteBooks.length > 0 && user.profile.favoriteBooks.some(item => item.id === bookid)) {
                     setIsSaved(true);
-                }
+                }else{
+                    setIsSaved(false);
+                } 
             }
 
         } catch (err) {
@@ -125,6 +129,49 @@ function BookDetail({ book, bookid, bookLoading }) {
             items.push(modifiedBook);
             window.localStorage.setItem('favoriteList', JSON.stringify(items));
             setIsSaved(true);
+        }
+    }
+
+    const updateUserData = async (user) => {
+        console.log(user);
+        if (user.createdAt) delete user.createdAt;
+        if (user.updatedAt) delete user.updatedAt;
+        const res = await API.graphql({
+            query: updateUser,
+            variables: { input: user },
+            authMode: "AMAZON_COGNITO_USER_POOLS"
+        });
+        if (res && res.data) return res.data.updateUser;
+    }
+
+    const updateFavorite = async (book, isAdd) => {
+        setProcessingFavorite(true);
+        try {
+            let updatedUser = user?.profile ? user.profile : null;
+            let favList = updatedUser.favoriteBooks ? updatedUser.favoriteBooks : [];
+            if (isAdd && (favList.length === 0 || !favList.some(item => item.id === book.id))) {
+                let data = book;
+                if (data.createdAt) delete data.createdAt;
+                if (data.updatedAt) delete data.updatedAt;
+                favList.push(data);
+            } else if (favList.length > 0) {
+                favList = favList.filter(item => item.id !== book.id);
+            }
+
+            updatedUser.favoriteBooks = favList;
+
+            console.log("updated ?", updatedUser);
+            let updatedProfile = await updateUserData(updatedUser);
+            if (updatedProfile) {
+                setUser({ ...user, profile: updatedProfile });
+                checkUser();
+            }
+            Toaster(`Sucessfully ${isAdd ? 'added to' : 'removed from'} favorite list.`);
+            setProcessingFavorite(false);
+        } catch (err) {
+            console.error(err);
+            Toaster("Error updating favorite list", true);
+            setProcessingFavorite(false);
         }
     }
 
@@ -280,17 +327,17 @@ function BookDetail({ book, bookid, bookLoading }) {
 
                                                     {
                                                         isSaved &&
-                                                        <button onClick={() => removeFromLocalStorage(book)} type="button" className="btn btn-danger btn-icon btn-block">
+                                                        <button disabled={processingFavorite} onClick={() => updateFavorite(book)} type="button" className="btn btn-danger btn-icon btn-block">
                                                             <span className="btn-inner--icon"><i className="fas fa-trash"></i></span>
-                                                            <span className="btn-inner--text">Delete from favorite</span>
+                                                            <span className="btn-inner--text">{`${processingFavorite ? "Deleting" : "Delete"} from favorite`}</span>
                                                         </button>
                                                     }
 
                                                     {
                                                         !isSaved &&
-                                                        <button onClick={() => savetoLocalStorage(book)} type="button" className="btn btn-success btn-icon btn-block">
+                                                        <button disabled={processingFavorite} onClick={() => updateFavorite(book, true)} type="button" className="btn btn-success btn-icon btn-block">
                                                             <span className="btn-inner--icon"><i className="fas fa-bookmark"></i></span>
-                                                            <span className="btn-inner--text">Save to favorite</span>
+                                                            <span className="btn-inner--text">{`${processingFavorite ? "Saving" : "Save"} to favorite`}</span>
                                                         </button>
                                                     }
                                                 </div>

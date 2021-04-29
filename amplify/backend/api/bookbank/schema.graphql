@@ -22,6 +22,22 @@ type Book @model
   boughtBy: String
 }
 
+type RawBook{
+  id: ID!
+  title: String!
+  description: String
+  author: String!
+  publication: String!
+  isbn: String!
+  category: [String!]
+  condition: String!
+  price: String!
+  picture: String
+  username : String
+  availability : String
+  boughtBy: String
+}
+
 type Review @model
 @key(name: "overallReviewsForBook", fields: ["isbn"], queryField: "overallReviewsForBook"){
   id : ID!
@@ -59,10 +75,7 @@ type User @model
   description: String
   phoneNumber: String
   image: String
-  favoriteBooks : [Book]
-  addedBooks : [Book]
-  soldBooks : [Book]
-  boughtBooks : [Book]
+  favoriteBooks : [RawBook]
   email : String
   interest: [String!]
 }

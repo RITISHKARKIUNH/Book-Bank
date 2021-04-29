@@ -3,23 +3,14 @@ import { useState, useEffect } from 'react';
 import Book from '../../components/books/book';
 
 function FavoriteBooks({ user }) {
+    console.log(user);
     if (!user) return null;
     const [favBooks, setFavBooks] = useState([]);
 
     useEffect(() => {
-        let items = JSON.parse(window.localStorage.getItem('favoriteList'));
-        let favList = [];
-        console.log(items);
-        if (items && items.length > 0) {
-            items.forEach(book => {
-                if (book.addedBy === user.username) {
-                    favList.push(book);
-                }
-            });
-        }
-
+        const favList = user?.profile?.favoriteBooks ? user.profile.favoriteBooks : [];
         setFavBooks(favList);
-    }, []);
+    }, [user]);
 
     return (
         <>

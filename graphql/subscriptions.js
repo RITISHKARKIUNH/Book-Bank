@@ -174,59 +174,6 @@ export const onCreateUser = /* GraphQL */ `
         username
         availability
         boughtBy
-        createdAt
-        updatedAt
-      }
-      addedBooks {
-        id
-        title
-        description
-        author
-        publication
-        isbn
-        category
-        condition
-        price
-        picture
-        username
-        availability
-        boughtBy
-        createdAt
-        updatedAt
-      }
-      soldBooks {
-        id
-        title
-        description
-        author
-        publication
-        isbn
-        category
-        condition
-        price
-        picture
-        username
-        availability
-        boughtBy
-        createdAt
-        updatedAt
-      }
-      boughtBooks {
-        id
-        title
-        description
-        author
-        publication
-        isbn
-        category
-        condition
-        price
-        picture
-        username
-        availability
-        boughtBy
-        createdAt
-        updatedAt
       }
       email
       interest
@@ -258,59 +205,6 @@ export const onUpdateUser = /* GraphQL */ `
         username
         availability
         boughtBy
-        createdAt
-        updatedAt
-      }
-      addedBooks {
-        id
-        title
-        description
-        author
-        publication
-        isbn
-        category
-        condition
-        price
-        picture
-        username
-        availability
-        boughtBy
-        createdAt
-        updatedAt
-      }
-      soldBooks {
-        id
-        title
-        description
-        author
-        publication
-        isbn
-        category
-        condition
-        price
-        picture
-        username
-        availability
-        boughtBy
-        createdAt
-        updatedAt
-      }
-      boughtBooks {
-        id
-        title
-        description
-        author
-        publication
-        isbn
-        category
-        condition
-        price
-        picture
-        username
-        availability
-        boughtBy
-        createdAt
-        updatedAt
       }
       email
       interest
@@ -342,59 +236,6 @@ export const onDeleteUser = /* GraphQL */ `
         username
         availability
         boughtBy
-        createdAt
-        updatedAt
-      }
-      addedBooks {
-        id
-        title
-        description
-        author
-        publication
-        isbn
-        category
-        condition
-        price
-        picture
-        username
-        availability
-        boughtBy
-        createdAt
-        updatedAt
-      }
-      soldBooks {
-        id
-        title
-        description
-        author
-        publication
-        isbn
-        category
-        condition
-        price
-        picture
-        username
-        availability
-        boughtBy
-        createdAt
-        updatedAt
-      }
-      boughtBooks {
-        id
-        title
-        description
-        author
-        publication
-        isbn
-        category
-        condition
-        price
-        picture
-        username
-        availability
-        boughtBy
-        createdAt
-        updatedAt
       }
       email
       interest
