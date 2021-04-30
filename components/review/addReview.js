@@ -65,11 +65,11 @@ function AddReview({ userId, overAllReview, isbn, user }) {
                 setUploadingReview(false);
                 updateBookRating(response.data.createUserRating);
             }
+            resetForm(e);
         } catch (err) {
             Toaster(err.message, true);
+            resetForm(e);
         }
-
-        resetForm(e);
     }
 
     async function updateBookRating(rating) {

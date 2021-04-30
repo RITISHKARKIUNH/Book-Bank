@@ -162,39 +162,6 @@ function NavBar({ pageName }) {
                             }
                         </DropdownMenu>
                     </UncontrolledDropdown>
-
-                    {/* <div className="collapse show">
-                        <ul className="navbar-nav">
-                            <li className={`nav-item dropdown ${dropdownOpen ? 'show' : ''}`}>
-                                <span
-                                    onClick={(e) => { e.stopPropagation(); setDropDownOpen(!dropdownOpen) }}
-                                    style={{ fontSize: "30px" }}
-                                    className="nav-link"
-                                    id="navbar-primary_dropdown_1"
-                                    role="button"
-                                    data-toggle="dropdown"
-                                    aria-haspopup="true"
-                                    aria-expanded={dropdownOpen ? 'true' : 'false'}
-                                >
-                                    <i className="fas fa-user-circle"></i>
-                                </span>
-                                <div className={`dropdown-menu dropdown-menu-right ${dropdownOpen ? 'show' : ''}`} aria-labelledby="navbar-primary_dropdown_1">
-                                    {
-                                        user && <React.Fragment>
-                                            <Link href="/profile" as="/profile">
-                                                <a className="dropdown-item" >Profile</a>
-                                            </Link>
-                                            <div className="dropdown-divider" />
-                                            <span role="button" className="cursor dropdown-item" onClick={() => signOut()}>Logout</span>
-                                        </React.Fragment>
-                                    }
-                                    {
-                                        !user && <a className="dropdown-item" href="/login">Login</a>
-                                    }
-                                </div>
-                            </li>
-                        </ul>
-                    </div> */}
                 </div>
             </nav>
         </header>

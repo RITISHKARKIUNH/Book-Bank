@@ -224,3 +224,27 @@ header{
         align-items: center;
     }
 }
+
+//advanced options styling
+.advanced-options{
+    .search-options{
+        position: absolute;
+        width: 250px;
+        height:auto;
+        background-color: white;
+        border-radius: 5px;
+        padding: 10px;
+        margin-top: 3px;
+        color: black;
+        left:0;
+        display: none;
+        z-index:100;
+        label, input{
+            cursor: pointer;
+        }
+    }
+
+    &:hover .search-options{
+        display: block;
+    }
+}

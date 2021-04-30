@@ -43,7 +43,7 @@ function UserReviewView({ user, onEdit }) {
         <>
             <div className="page-content">
                 <div className="page-title d-flex justify-content-between align-items-center">
-                    <h1 className="text-3xl font-semibold tracking-wide mt-2 mb-3 text-white">Book reviews</h1>
+                    <h1 className="text-3xl font-semibold tracking-wide mt-2 mb-3 text-white">Added book reviews</h1>
                     {
                         userReviews && userReviews.length > 0 &&
                         <button style={{ height: "45px" }} className="btn btn-sm btn-info btn-icon rounded-pill" onClick={() => setSorting(!sortAscending)}>Sort {sortAscending ? ' by newest first' : ' by oldest first'}</button>
