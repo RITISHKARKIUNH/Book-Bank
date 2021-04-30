@@ -9,6 +9,7 @@ import {
 import { loadStripe } from "@stripe/stripe-js";
 
 import { Toaster } from '../components/common';
+import Book from '../components/books/book';
 import { Layout } from '../components/common';
 import CartItem from '../components/cart/cartItem';
 const stripePromise = loadStripe('pk_test_51Ikb4cFIMPr1Z4G8kXTNrJwdkkckrY33bhjm6DMpjMa50Re9nAGZsP12JwGbJMlBdkxYkR7JKQENgmwNJGwSpvo500uzcJT6X5');
@@ -130,12 +131,12 @@ function Cart() {
 
     const onPaymentSuccess = (response) => {
         console.log(response);
-        setPaymentResponse(response);
+        setPaymentResponse(cartItems);
         localStorage.removeItem('cart');
         window.dispatchEvent(new Event("storage"));
     }
 
-
+    console.log("payment response", paymentResponse);
     if (paymentResponse) {
         return (
             <Layout>
@@ -145,6 +146,11 @@ function Cart() {
                             <div className="card col">
                                 <div className="card-body">
                                     <h1> You have succesfully purchased folowing items</h1>
+                                    {
+                                        paymentResponse.map(book => {
+                                            return <Book key={book.id} book={book} purchasedView={true} />
+                                        })
+                                    }
                                     <a href="/" type="button" className="btn btn-primary btn-lg waves-effect waves-light">Continue Browsing</a>
                                 </div>
                             </div>

@@ -43,7 +43,6 @@ async function sendPurchaseEmail(bookOwnerId, user, API) {
         sgMail
             .send(msg)
             .then((response) => {
-                console.log('Email sent')
                 return response;
             })
             .catch((error) => {
@@ -100,7 +99,7 @@ export default async (req, res) => {
 
                 const updatedBooks = await updateBooks(API, user, lineItems);
                 if (updatedBooks) {
-                    console.log(updatedBooks);
+                    console.log(updatedBooks, typeof(updatedBooks), payment);
                     const emailRes = await sendPurchaseEmail(updatedBooks.bookOwnerId, user, API);
                     console.log(emailRes);
                 }

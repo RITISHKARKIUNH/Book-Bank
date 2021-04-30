@@ -136,7 +136,7 @@ function SearchBar() {
                                     id="serachByAll"
                                     onChange={(e) => handleFilterChange(e, 'all')}
                                 />
-                                <label className="custom-control-label" for="serachByAll">Include all</label>
+                                <label className="custom-control-label" htmlFor="serachByAll">Include all</label>
                             </div>
                             <div className="custom-control custom-checkbox">
                                 <input
@@ -145,7 +145,7 @@ function SearchBar() {
                                     id="serachByTitle"
                                     onChange={(e) => handleFilterChange(e, 'title')}
                                 />
-                                <label className="custom-control-label" for="serachByTitle">Search by title</label>
+                                <label className="custom-control-label" htmlFor="serachByTitle">Search by title</label>
                             </div>
                             <div className="custom-control custom-checkbox">
                                 <input
@@ -155,7 +155,7 @@ function SearchBar() {
                                     id="searchByAuthor"
                                     onChange={(e) => handleFilterChange(e, 'author')}
                                 />
-                                <label className="custom-control-label" for="searchByAuthor">Search by author</label>
+                                <label className="custom-control-label" htmlFor="searchByAuthor">Search by author</label>
                             </div>
                             <div className="custom-control custom-checkbox">
                                 <input
@@ -165,7 +165,7 @@ function SearchBar() {
                                     id="searchByCategory"
                                     onChange={(e) => handleFilterChange(e, 'category')}
                                 />
-                                <label className="custom-control-label" for="searchByCategory">Search by category</label>
+                                <label className="custom-control-label" htmlFor="searchByCategory">Search by category</label>
                             </div>
                         </div>
                     </span>

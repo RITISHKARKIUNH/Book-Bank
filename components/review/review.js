@@ -1,11 +1,28 @@
+import { useEffect, useState } from 'react';
+import { API } from 'aws-amplify';
 import { StarRating } from '../common';
 import { formatDate } from '../../lib/utils';
 import { Picture } from '../common';
+import { getUser } from '../../graphql/queries';
 function Review({ review }) {
+    const [picture, setPicture] = useState(null);
+    useEffect(() => {
+        getUserPicture();
+    }, []);
+
+    async function getUserPicture() {
+        const response = await API.graphql({
+            query: getUser,
+            variables: { id: review.username }
+        });
+        if (response) { setPicture(response.data.getUser.image); }
+    }
+
     return (
         <div className="review">
             <div className="user">
-                {review.profile ? <Picture path={review.profile} style={{ width: "35px", height: "35px", borderRadius: "50%" }} alt="review image" className="rounded-circle mr-1 shadow" /> : <i className="fas fa-user-circle" />}
+                {picture && <Picture path={picture} style={{ width: "35px", height: "35px", borderRadius: "50%" }} alt="review image" className="rounded-circle mr-1 shadow" />}
+                {/* {!picture && <i className="fas fa-user-circle" />} */}
                 User : {review.name ? review.name : review.username}
             </div>
             <div className="title">
