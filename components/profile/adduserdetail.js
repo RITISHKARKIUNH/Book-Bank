@@ -4,7 +4,7 @@ import { API, facebookSignInButton, Storage } from 'aws-amplify';
 import { v4 as uuid } from "uuid";
 import Select from 'react-select';
 
-import { Input } from '../common';
+import { Input, Toaster } from '../common';
 import { makeCategoryOptions, createOption } from '../../lib/commondata';
 const selectStyle = {
     control: (base, state) => ({
@@ -55,6 +55,12 @@ const AddUserDetail = ({ user, mode, onToastEvent }) => {
                 });
             }
 
+            if(firstName.length === 0 || secondName.length === 0 || email.length === 0 || phoneNumber.length === 0 || description.length === 0){
+                Toaster('Required data for user profile are missing', true);
+                setUpdatingProfile(false);
+                return;
+            }
+
             if (image && localImage) {
                 const fileName = `${image.name}_${uuid()}`;
                 key = fileName;
@@ -96,6 +102,7 @@ const AddUserDetail = ({ user, mode, onToastEvent }) => {
             }
             setUpdatingProfile(false);
         } catch (e) {
+            console.log(e);
             onToastEvent({
                 message: "Opps something went wrong",
                 mode: 'error'
@@ -126,7 +133,7 @@ const AddUserDetail = ({ user, mode, onToastEvent }) => {
                     <div className="card-body">
 
                         <div className="form-group">
-                            <label className="form-control-label">First Name</label>
+                            <label className="form-control-label">First Name *</label>
                             <div className="input-group">
                                 <Input
                                     type="text"
@@ -141,7 +148,7 @@ const AddUserDetail = ({ user, mode, onToastEvent }) => {
                         </div>
 
                         <div className="form-group">
-                            <label className="form-control-label">Last Name</label>
+                            <label className="form-control-label">Last Name *</label>
                             <div className="input-group">
                                 <Input
                                     type="text"
@@ -156,7 +163,7 @@ const AddUserDetail = ({ user, mode, onToastEvent }) => {
                         </div>
 
                         <div className="form-group">
-                            <label className="form-control-label">Phone Number</label>
+                            <label className="form-control-label">Phone Number *</label>
                             <div className="input-group">
                                 <Input
                                     type="text"
@@ -171,7 +178,7 @@ const AddUserDetail = ({ user, mode, onToastEvent }) => {
                         </div>
 
                         <div className="form-group">
-                            <label className="form-control-label">Contact Email</label>
+                            <label className="form-control-label">Contact Email *</label>
                             <div className="input-group">
                                 <Input
                                     type="text"
@@ -186,7 +193,7 @@ const AddUserDetail = ({ user, mode, onToastEvent }) => {
                         </div>
 
                         <div className="form-group">
-                            <label className="form-control-label">Your Interests</label>
+                            <label className="form-control-label">Your Interests *</label>
                             <div className="input-group">
                                 <Select
                                     isMulti
@@ -203,7 +210,7 @@ const AddUserDetail = ({ user, mode, onToastEvent }) => {
 
 
                         <div className="form-group">
-                            <label className="form-control-label">Description</label>
+                            <label className="form-control-label">Description *</label>
                             <div className="input-group">
                                 <textarea
                                     value={description}

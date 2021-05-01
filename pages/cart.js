@@ -7,7 +7,6 @@ import {
     useElements
 } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
-
 import { Toaster } from '../components/common';
 import Book from '../components/books/book';
 import { Layout } from '../components/common';
@@ -47,13 +46,16 @@ const CheckoutForm = ({ cart, totalPrice, onPaymentSuccess }) => {
                     method: "POST",
                     body: JSON.stringify(body)
                 });
+                console.log(response);
                 if (response.status === 200) {
                     onPaymentSuccess(response);
                     Toaster('Payment Sucessfully Processed');
+                }else{
+                    Toaster('Payment Not Processed', true);
                 }
                 setProcessingPayment(false);
             } catch (error) {
-                console.log(error);
+                console.log("front end error", error);
                 Toaster('Payment Not Processed', true);
                 setProcessingPayment(false);
             }

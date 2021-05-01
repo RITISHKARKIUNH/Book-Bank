@@ -126,7 +126,7 @@ function SearchBar() {
                         placeholder="Search Books"
                     />
                     <span className="position-relative advanced-options ml-3">
-                        <button className="btn btn-primary">Options </button>
+                        <button className="btn btn-primary shadow-lg">Options </button>
                         <div className="search-options">
                             <div className="custom-control custom-checkbox">
                                 <input

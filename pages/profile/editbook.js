@@ -129,7 +129,7 @@ function EditBook({ bookData }) {
                     <div className="card">
                         <div className="card-body">
                             <div className="form-group">
-                                <label className="form-control-label">Book title</label>
+                                <label className="form-control-label">Book title *</label>
                                 <div className="input-group">
                                     <Input
                                         type="text"
@@ -142,7 +142,7 @@ function EditBook({ bookData }) {
                             </div>
 
                             <div className="form-group">
-                                <label className="form-control-label">Book Author</label>
+                                <label className="form-control-label">Book Author *</label>
                                 <div className="input-group">
                                     <Input
                                         type="text"
@@ -156,7 +156,7 @@ function EditBook({ bookData }) {
                             </div>
 
                             <div className="form-group">
-                                <label className="form-control-label">Book Condition</label>
+                                <label className="form-control-label">Book Condition *</label>
                                 <div className="input-group">
                                     <Select
                                         className="bookbank-select"
@@ -171,7 +171,7 @@ function EditBook({ bookData }) {
                             </div>
 
                             <div className="form-group">
-                                <label className="form-control-label">Categories</label>
+                                <label className="form-control-label">Categories *</label>
                                 <div className="input-group">
                                     <CreatableSelect
                                         isMulti
@@ -188,7 +188,7 @@ function EditBook({ bookData }) {
                             </div>
 
                             <div className="form-group">
-                                <label className="form-control-label">Book Price</label>
+                                <label className="form-control-label">Book Price *</label>
                                 <div className="input-group">
                                     <Input
                                         type="text"
@@ -201,7 +201,7 @@ function EditBook({ bookData }) {
                             </div>
 
                             <div className="form-group">
-                                <label className="form-control-label">Book Publication</label>
+                                <label className="form-control-label">Book Publication *</label>
                                 <div className="input-group">
                                     <Input
                                         type="text"
@@ -233,7 +233,7 @@ function EditBook({ bookData }) {
                             </button>
 
                             <div className="form-group">
-                                <label className="form-control-label">Book Description</label>
+                                <label className="form-control-label">Book Description *</label>
 
                                 <SimpleMDE value={book.description} onChange={value => setBook({ ...book, description: value })} />
                             </div>

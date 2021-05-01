@@ -147,7 +147,7 @@ function AddBook() {
                         <div className="card-body">
                             <form className="book-form" onSubmit={handleSubmit(onSubmit)}>
                                 <div className="form-group">
-                                    <label className="form-control-label">Book title</label>
+                                    <label className="form-control-label">Book title *</label>
                                     <div className="input-group">
                                         <input placeholder="Book title" className="form-control" {...register("title", { required: "Book title is required" })} />
                                         {errors.title && <span className="text-danger">{errors.title.message}</span>}
@@ -155,7 +155,7 @@ function AddBook() {
                                 </div>
 
                                 <div className="form-group">
-                                    <label className="form-control-label">Book Author</label>
+                                    <label className="form-control-label">Book Author *</label>
                                     <div className="input-group">
                                         <input placeholder="Book author" className="form-control" {...register("author", { required: "Book author is required" })} />
                                         {errors.author && <span className="text-danger">{errors.author.message}</span>}
@@ -164,7 +164,7 @@ function AddBook() {
 
 
                                 <div className="form-group">
-                                    <label className="form-control-label">Book ISBN</label>
+                                    <label className="form-control-label">Book ISBN *</label>
                                     <div className="input-group">
                                         <input placeholder="Isbn" className="form-control" {...register("isbn", { required: "Isbn is required" })} />
                                         {errors.isbn && <span className="text-danger">{errors.isbn.message}</span>}
@@ -172,7 +172,7 @@ function AddBook() {
                                 </div>
 
                                 <div className="form-group">
-                                    <label className="form-control-label">Book Price</label>
+                                    <label className="form-control-label">Book Price *</label>
                                     <div className="input-group">
                                         <input placeholder="Book Price" className="form-control" {...register("price", { required: "Book Price is required" })} />
                                         {errors.price && <span className="text-danger">{errors.price.message}</span>}
@@ -180,7 +180,7 @@ function AddBook() {
                                 </div>
 
                                 <div className="form-group">
-                                    <label className="form-control-label">Book Publication</label>
+                                    <label className="form-control-label">Book Publication *</label>
                                     <div className="input-group">
                                         <input placeholder="Book Publication" className="form-control" {...register("publication", { required: "Book publication required" })} />
                                         {errors.publication && <span className="text-danger">{errors.publication.message}</span>}
@@ -189,7 +189,7 @@ function AddBook() {
 
 
                                 <div className="form-group">
-                                    <label className="form-control-label">Book Condition</label>
+                                    <label className="form-control-label">Book Condition *</label>
                                     <div className="input-group">
                                         <Controller
                                             name="condition"
@@ -208,7 +208,7 @@ function AddBook() {
                                 </div>
 
                                 <div className="form-group">
-                                    <label className="form-control-label">Categories</label>
+                                    <label className="form-control-label">Categories *</label>
                                     <div className="input-group">
                                         <Controller
                                             name="category"
@@ -229,7 +229,7 @@ function AddBook() {
                                 </div>
 
                                 <div className="form-group">
-                                    <label className="form-control-label">Book Description</label>
+                                    <label className="form-control-label">Book Description *</label>
                                     <SimpleMDE value={description} onChange={value => setDescription(value)} />
                                 </div>
 

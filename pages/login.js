@@ -42,6 +42,7 @@ function Login() {
     async function signUp() {
         try {
             await Auth.signUp({ username: email, password, attributes: { email } });
+            Toaster('An email with verification code has been sent to your profile. Please check your email and add verification code here.');
             setUiState('confirmSignUp');
         } catch (err) { 
             console.log(err);
@@ -54,7 +55,8 @@ function Login() {
             await await Auth.confirmSignUp(email, authCode);
             await Auth.signIn(email, password);
             // setUiState('signedIn');
-            router.push('/');
+            Toaster('Signup successful. Welcome to our platform. Please go to your profile to add more information.');
+            // router.push('/');
         } catch (err) { 
             console.log({ err }) ;
             Toaster(err.message, true);
@@ -64,7 +66,7 @@ function Login() {
     async function signIn() {
         try {
             await Auth.signIn(email, password);
-            // setUiState('signedIn');
+            Toaster('Sign in successful . Welcome to our platform');
             router.push('/');
         } catch (err) { 
             console.log({ err });

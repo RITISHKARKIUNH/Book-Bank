@@ -8,6 +8,7 @@ import { getUser } from "../../../graphql/queries";
 const stripe = new Stripe(`${process.env.STRIPE_SECRET_KEY}`);
 const sgMail = require('@sendgrid/mail');
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+import { toast } from 'react-toastify';
 
 async function sendPurchaseEmail(bookOwnerId, user, API) {
     const buyer = await API.graphql({ query: getUser, variables: { id: user.username } });
@@ -30,8 +31,8 @@ async function sendPurchaseEmail(bookOwnerId, user, API) {
         console.log(buyer, recepientEmails);
         const sourceEmailAddress = "ritish@impct.co";
         const buyerData = buyer.data.getUser;
-        const textMsg=`Hello !!! \n The book you had listed in bookbank portal has been purchased by ${buyerData.firstName} ${buyerData.lastName}. Please contact him about the book delivery.\nThese are the buyers personal details:\nName: ${buyerData.firstName} ${buyerData.lastName}\nEmail: ${buyerData.email}\nPhone Number: ${buyerData.phoneNumber}\nThank your for using our platform.\nSincerely\nBook Bank Team`;
-        const messageHtml=`<div><h1>Hello !!!</h1><p>The book you had listed in bookbank portal has been purchased by <b>${buyerData.firstName} ${buyerData.lastName}</b>. Please contact him about the book delivery.</p><p>These are the buyers contact details:</p><p><b>Name: ${buyerData.firstName} ${buyerData.lastName}</b></p><p><b>Email: ${buyerData.email}</b></p><p><b>Phone Number: ${buyerData.phoneNumber}</b></p><p>Thank your for using our platform.</p><p>Sincerely</p><p><b>Book Bank Team</b></p></div>`;
+        const textMsg = `Hello !!! \n The book you had listed in bookbank portal has been purchased by ${buyerData.firstName} ${buyerData.lastName}. Please contact him about the book delivery.\nThese are the buyers personal details:\nName: ${buyerData.firstName} ${buyerData.lastName}\nEmail: ${buyerData.email}\nPhone Number: ${buyerData.phoneNumber}\nThank your for using our platform.\nSincerely\nBook Bank Team`;
+        const messageHtml = `<div><h1>Hello !!!</h1><p>The book you had listed in bookbank portal has been purchased by <b>${buyerData.firstName} ${buyerData.lastName}</b>. Please contact him about the book delivery.</p><p>These are the buyers contact details:</p><p><b>Name: ${buyerData.firstName} ${buyerData.lastName}</b></p><p><b>Email: ${buyerData.email}</b></p><p><b>Phone Number: ${buyerData.phoneNumber}</b></p><p>Thank your for using our platform.</p><p>Sincerely</p><p><b>Book Bank Team</b></p></div>`;
         const msg = {
             to: recepientEmails,
             from: `${sourceEmailAddress}`,
@@ -99,7 +100,7 @@ export default async (req, res) => {
 
                 const updatedBooks = await updateBooks(API, user, lineItems);
                 if (updatedBooks) {
-                    console.log(updatedBooks, typeof(updatedBooks), payment);
+                    console.log(updatedBooks, typeof (updatedBooks), payment);
                     const emailRes = await sendPurchaseEmail(updatedBooks.bookOwnerId, user, API);
                     console.log(emailRes);
                 }
@@ -112,7 +113,16 @@ export default async (req, res) => {
             }
         }
     } catch (error) {
-        console.log(error);
+        toast.error(error.message, {
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+        });
+        console.log("yaha bata ako ho", error);
         return res.status(400).json({
             message: error.message
         });

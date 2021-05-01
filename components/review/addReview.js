@@ -124,7 +124,7 @@ function AddReview({ userId, overAllReview, isbn, user }) {
                     </div>
 
                     <div className="form-group">
-                        <label className="form-control-label">Title</label>
+                        <label className="form-control-label">Title *</label>
                         <div className="input-group">
                             <input placeholder="title" className="form-control" {...register("title", { required: "Title is required" })} />
                             {errors.title && <span className="text-danger">{errors.title.message}</span>}
@@ -132,7 +132,7 @@ function AddReview({ userId, overAllReview, isbn, user }) {
                     </div>
 
                     <div className="form-group">
-                        <label className="form-control-label">Description</label>
+                        <label className="form-control-label">Description *</label>
                         <div className="input-group">
                             <textarea placeholder="description" className="form-control" {...register("description", { required: "Description is required" })} />
                             {errors.description && <span className="text-danger">{errors.description.message}</span>}
